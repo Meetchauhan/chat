@@ -80,7 +80,9 @@ export interface ToastErrorArg {
 export interface GetMessageType {
   chat: {
     messages: {
-      map(arg0: (item: ChatType) => import("react/jsx-runtime").JSX.Element): ReactNode;
+      map(
+        arg0: (item: ChatType) => import("react/jsx-runtime").JSX.Element
+      ): ReactNode;
       message: [];
     };
   };
@@ -170,4 +172,36 @@ export interface Message {
     updatedAt: string;
     __v: number;
   };
+}
+
+export interface UsersSliceInitialState {
+  data: {
+    success: boolean;
+    data: [];
+  } | null;
+  loading: boolean;
+  error: null | string;
+}
+
+export interface FindUsersType {
+  _id: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface SendRequestSliceInitialState {
+  data: {
+    success: boolean;
+    data: [];
+  } | null;
+  loading: boolean;
+  error: null | string;
+}
+export interface AcceptRequestSliceInitialState {
+  data: {
+    success: boolean;
+    data: [];
+  } | null;
+  loading: boolean;
+  error: null | string;
 }

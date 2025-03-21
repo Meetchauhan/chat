@@ -4,6 +4,7 @@ import Logout from "../logout/Logout";
 import { AppDispatch } from "../../store/store";
 import { getUsers, removeSelectUser } from "../../features/ChatSlice";
 import useSelectedUser from "../../customHooks/useSelectedUser";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -42,6 +43,9 @@ const Header = () => {
           </div>
         )}
         <div className="">
+          <div className="">
+            <Link to={"/find-users"}>Find Users</Link>
+          </div>
           <div className="text-orange-600 text-2xl">
             {profile?.data?.firstName} {profile?.data?.lastName}
           </div>

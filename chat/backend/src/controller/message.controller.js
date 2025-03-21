@@ -2,12 +2,28 @@ import User from "../models/user.models.js";
 import Message from "../models/message.modals.js";
 import { getReceiverSocketId, io } from "../util/socket.js";
 
-export const getUserForSidebar = async (req, res) => {
+export const getAllUsers = async (req, res) => {
   try {
     const loggedInUserId = req?.user?._id;
     const filteredUsers = await User.find({
       _id: { $ne: loggedInUserId },
     }).select("");
+    res.status(200).json({ success: true, data: filteredUsers });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const getUserForSidebar = async (req, res) => {
+  try {
+    const loggedInUserId = req?.user?._id;
+    const loggedInUser = await User.findById(loggedInUserId).select(
+      "connectedUsers"
+    );
+    const connectedUserId = loggedInUser?.connectedUsers?.map(
+      (connect) => connect?.userId
+    );
+    const filteredUsers = await User.find({ _id: { $in: connectedUserId } }).select("firstName lastName email phone");
     res.status(200).json({ success: true, data: filteredUsers });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });

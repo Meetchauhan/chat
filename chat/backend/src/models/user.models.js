@@ -1,5 +1,18 @@
 import mongoose from "mongoose";
 
+const connectedUsers = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId, // Storing user ID as ObjectId
+    ref: "User",
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ["pending", "accepted"],
+    default: "pending",
+  },
+});
+
 const userSchema = new mongoose.Schema(
   {
     firstName: {
@@ -21,6 +34,7 @@ const userSchema = new mongoose.Schema(
     otp: {
       type: Number,
     },
+    connectedUsers: [connectedUsers],
   },
 
   {

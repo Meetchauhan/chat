@@ -9,6 +9,7 @@ import { AppDispatch } from "./store/store";
 import { useEffect } from "react";
 import { getProfile } from "./features/ProfileSlice";
 import Layout from "./components/layout/Layout";
+import FindUsers from "./pages/findUsers/FindUsers";
 // import { getMessages, subscribeToMessage, unSubscribeToMessage } from "./features/ChatSlice";
 // import useSelectedUser from "./customHooks/useSelectedUser";
 
@@ -22,17 +23,6 @@ const App: React.FC = () => {
     dispatch(getProfile());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   // Subscribe to new messages
-  //   dispatch(getMessages(selectedUser?._id));
-  //   subscribeToMessage(dispatch);
-
-  //   // Cleanup function to unsubscribe
-  //   return () => {
-  //     unSubscribeToMessage();
-  //   };
-  // }, [dispatch, selectedUser]);
-
   return (
     <Layout>
       <Routes>
@@ -45,6 +35,7 @@ const App: React.FC = () => {
           path="/"
           element={profile?.success ? <Home /> : <Navigate to={"/login"} />}
         />
+        <Route path="/find-users" element={<FindUsers />} />
       </Routes>
     </Layout>
   );

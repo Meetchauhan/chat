@@ -41,7 +41,8 @@ export const subscribeToMessages = (
   dispatch: (action: { type: string; payload: Message }) => void,
   socket: typeof Socket | null,
   selectedUserId: string,
-  currentUserId: string | undefined
+  currentUserId: string | undefined,
+  messageLoading: boolean
 ) => {
   if (!socket) return;
 
@@ -52,13 +53,17 @@ export const subscribeToMessages = (
     console.log("🔵 New message received:", newMessage);
 
     // Ensure the message is meant for the currently selected chat
-    if (
-      (newMessage.senderId === selectedUserId &&
-        newMessage.recieverId === currentUserId) ||
-      (newMessage.senderId === currentUserId &&
-        newMessage.recieverId === selectedUserId)
-    ) {
-      dispatch(addMessage(newMessage)); // Only add messages that match the selected chat
+    console.log("messageLoading", messageLoading);
+    
+    if (!messageLoading) {
+      if (
+        (newMessage.senderId === selectedUserId &&
+          newMessage.recieverId === currentUserId) ||
+        (newMessage.senderId === currentUserId &&
+          newMessage.recieverId === selectedUserId)
+      ) {
+        dispatch(addMessage(newMessage)); // Only add messages that match the selected chat
+      }
     }
   });
 };
@@ -92,10 +97,12 @@ const chatSlice = createSlice({
       localStorage.setItem("selectedUser", JSON.stringify(null));
     },
     addMessage: (state, action: PayloadAction<Message>) => {
-      if (!Array.isArray(state.messages)) {
-        state.messages = []; // ✅ Ensure `messages` is always an array
+      if (state.messageLoading === false) {
+        if (!Array.isArray(state.messages)) {
+          state.messages = []; // ✅ Ensure `messages` is always an array
+        }
+        state.messages.push(action.payload);
       }
-      state.messages.push(action.payload);
     },
   },
   extraReducers: (builder) => {

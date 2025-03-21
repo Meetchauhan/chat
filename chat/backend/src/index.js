@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import { connectDB } from "./config/db.config.js";
 import registerRoute from "./routes/user.routes.js";
 import messageRoute from "./routes/message.routes.js";
+import connecUsersRoute from "./routes/connectingUsers.routes.js";
 import { app, server } from "./util/socket.js";
 
 // const app = express();
@@ -16,7 +17,7 @@ dotenv.config();
 app.use(
   cors({
     origin: "http://localhost:5173",
-    // allowedHeaders: ["*"], 
+    // allowedHeaders: ["*"],
     credentials: true,
   })
 );
@@ -35,6 +36,7 @@ app.use(cookieParser());
 
 app.use("/api/user", registerRoute);
 app.use("/api/message", messageRoute);
+app.use("/api", connecUsersRoute);
 
 app.get("/", (req, res) => {
   res.send("Server is started");

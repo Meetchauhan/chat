@@ -43,6 +43,9 @@ const Chat = () => {
   }, [dispatch, selectedUser]);
 
   // ✅ Always listen for new messages (runs once on mount)
+  const messageLoading = useSelector(
+    (item: RootState) => item?.chat?.messageLoading
+  );
 
   useEffect(() => {
     if (selectedUser && socket) {
@@ -50,7 +53,8 @@ const Chat = () => {
         dispatch,
         socket,
         selectedUser._id,
-        profile?.data?._id
+        profile?.data?._id,
+        messageLoading
       );
     }
 
@@ -59,7 +63,7 @@ const Chat = () => {
         unSubscribeToMessage(socket); // Cleanup previous subscriptions when component unmounts or user changes
       }
     };
-  }, [selectedUser, socket, dispatch, profile?.data?._id]);
+  }, [selectedUser, socket, dispatch, profile?.data?._id, messageLoading]);
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -68,11 +72,8 @@ const Chat = () => {
     }
   }, [getChat]);
 
-
-
   return (
     <div className="flex flex-col justify-between h-full">
-     
       <div className="w-full">
         <div className="text-orange-600 text-xl lg:text-2xl text-left px-5 py-2 lg:py-3 bg-[#85300452] w-full rounded-sm capitalize">
           {selectedUser?.firstName} {selectedUser?.lastName}
@@ -96,40 +97,44 @@ const Chat = () => {
                     key={item?._id}
                     className="flex justify-end text-[17px]  w-fit ml-auto  rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none max-w-[45%]"
                   >
-                    <div className="my-3 flex flex-row-reverse gap-3 w-full">
-                      {/* <div className="text-[20px] text-white bg-gray-600 rounded-full py-2 px-2.5 uppercase w-[50px] flex items-center">
+                    {item?.text && (
+                      <div className="my-3 flex flex-row-reverse gap-3 w-full">
+                        {/* <div className="text-[20px] text-white bg-gray-600 rounded-full py-2 px-2.5 uppercase w-[50px] flex items-center">
                         {firstNameInitial}
                         {lastNameInitial}
                       </div> */}
-                      <div className="w-fit max-w-[100%]">
-                        <div className="mb-[0.5] text-[10px] text-white text-right">
-                          {formateMessageTime(item?.createdAt)}
-                        </div>
-                        <div className="py-1 px-3  text-white bg-[#f54a0045] rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none overflow-hidden break-words">
-                          {item?.text}
+                        <div className="w-fit max-w-[100%]">
+                          <div className="mb-[0.5] text-[10px] text-white text-right">
+                            {formateMessageTime(item?.createdAt)}
+                          </div>
+                          <div className="py-1 px-3  text-white bg-[#f54a0045] rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none overflow-hidden break-words">
+                            {item?.text}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 ) : (
                   <div
                     key={item?._id}
                     className="flex justify-normal text-[17px]  mr-auto  rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none max-w-[45%]"
                   >
-                    <div className="my-3 flex flex-row gap-3 items-center w-full">
-                      <div className="text-[18px] lg:text-[20px] text-white bg-gray-600 rounded-full py-2 px-2.5 uppercase w-[45px] lg:w-[50px] flex items-center justify-center">
-                        {recieverFName}
-                        {recieverLName}
-                      </div>
-                      <div className="w-fit max-w-[100%]">
-                        <div className="mb-[0.5] text-[10px] text-white text-left">
-                          {formateMessageTime(item?.createdAt)}
+                    {item?.text && (
+                      <div className="my-3 flex flex-row gap-3 items-center w-full">
+                        <div className="text-[18px] lg:text-[20px] text-white bg-gray-600 rounded-full py-2 px-2.5 uppercase w-[45px] lg:w-[50px] flex items-center justify-center">
+                          {recieverFName}
+                          {recieverLName}
                         </div>
-                        <div className="py-1 px-3  text-white bg-black rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none overflow-hidden break-words min-w-[20px] max-w-full">
-                          {item?.text}
+                        <div className="w-fit max-w-[100%]">
+                          <div className="mb-[0.5] text-[10px] text-white text-left">
+                            {formateMessageTime(item?.createdAt)}
+                          </div>
+                          <div className="py-1 px-3  text-white bg-black rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none overflow-hidden break-words min-w-[20px] max-w-full">
+                            {item?.text}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 )
               )}

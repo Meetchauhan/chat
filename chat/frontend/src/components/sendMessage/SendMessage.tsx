@@ -9,19 +9,20 @@ import useSelectedUser from "../../customHooks/useSelectedUser";
 const SendMessage = () => {
   const selectedUser = useSelectedUser();
   const dispatch = useDispatch<AppDispatch>();
+
   const initialValue = {
     chat: "",
   };
   const { values, handleChange, handleSubmit } = useFormik({
     initialValues: initialValue,
     onSubmit: async (value, action) => {
-      console.log("chat text", value);
       const send = await dispatch(
         sendMessage({
           selectedUserId: selectedUser?._id,
           text: value?.chat,
         })
       );
+      // dispatch(getMessages(selectedUser?._id));
       if (send?.payload?.success) {
         await dispatch(getMessages(selectedUser?._id));
         action.resetForm();

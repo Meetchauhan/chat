@@ -3,8 +3,9 @@ import RegistrationSlice from "../features/RegstrationSlice";
 import AuthSlice from "../features/AuthSlice";
 import ToastSlice from "../features/ToastSlice";
 import ProfileSlice from "../features/ProfileSlice";
-// import UsersSlice from "../features/UsersSlice";
 import ChatSlice from "../features/ChatSlice";
+import UsersSlice from "../features/UsersSlice";
+import SendRequestSlice from "../features/SendRequestSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,8 +13,9 @@ const store = configureStore({
     auth: AuthSlice,
     toast: ToastSlice,
     profile: ProfileSlice,
-    // users: UsersSlice,
     chat: ChatSlice,  
+    users:UsersSlice,
+    sendRequest: SendRequestSlice
   },
 });
 
