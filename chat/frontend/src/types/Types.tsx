@@ -177,7 +177,7 @@ export interface Message {
 export interface UsersSliceInitialState {
   data: {
     success: boolean;
-    data: [];
+    data: [] | undefined;
   } | null;
   loading: boolean;
   error: null | string;
@@ -187,15 +187,33 @@ export interface FindUsersType {
   _id: string;
   firstName: string;
   lastName: string;
+  connectedUsers: [{ status: string }];
+  requests: [{ status: string }];
 }
 
 export interface SendRequestSliceInitialState {
   data: {
     success: boolean;
     data: [];
+    requests: [
+      {
+        senderId: {
+          _id: string;
+          firstName: string;
+          lastName: string;
+        };
+      }
+    ];
   } | null;
   loading: boolean;
   error: null | string;
+  sendRequest:
+    | [
+        {
+          requests: [];
+        }
+      ]
+    | null;
 }
 export interface AcceptRequestSliceInitialState {
   data: {
@@ -204,4 +222,17 @@ export interface AcceptRequestSliceInitialState {
   } | null;
   loading: boolean;
   error: null | string;
+}
+
+export interface SentRequestDataType {
+  sendRequest: {
+    sendRequest: {
+      sentRequests: [
+        {
+          userId: string;
+          status: string;
+        }
+      ];
+    };
+  };
 }

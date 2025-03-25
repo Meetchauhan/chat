@@ -2,10 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { AcceptRequestSliceInitialState } from "../types/Types";
 
-export const acceptRequest = createAsyncThunk("acceptRequest", async (_id) => {
+export const acceptRequest = createAsyncThunk("acceptRequest", async (recieverId: string) => {
   const response = await axios.post(
     "http://localhost:1322/api/acceptRequest",
-    { _id },
+    { recieverId },
     { withCredentials: true }
   );
   return response.data;

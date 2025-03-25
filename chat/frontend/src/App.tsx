@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { getProfile } from "./features/ProfileSlice";
 import Layout from "./components/layout/Layout";
 import FindUsers from "./pages/findUsers/FindUsers";
+import Request from "./pages/request/Request";
 // import { getMessages, subscribeToMessage, unSubscribeToMessage } from "./features/ChatSlice";
 // import useSelectedUser from "./customHooks/useSelectedUser";
 
@@ -36,6 +37,7 @@ const App: React.FC = () => {
           element={profile?.success ? <Home /> : <Navigate to={"/login"} />}
         />
         <Route path="/find-users" element={<FindUsers />} />
+        <Route path="/request" element={<Request />} />
       </Routes>
     </Layout>
   );

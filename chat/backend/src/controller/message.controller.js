@@ -5,11 +5,19 @@ import { getReceiverSocketId, io } from "../util/socket.js";
 export const getAllUsers = async (req, res) => {
   try {
     const loggedInUserId = req?.user?._id;
+
+    // Fetch logged-in user's connected users
+    const loggedInUser = await User.findById(loggedInUserId).select("connectedUsers");
+    const connectedUserIds = loggedInUser?.connectedUsers?.map(connect => connect?.userId) || [];
+
+    // Fetch all users except the logged-in user and connected users
     const filteredUsers = await User.find({
-      _id: { $ne: loggedInUserId },
-    }).select("");
+      _id: { $ne: loggedInUserId, $nin: connectedUserIds },
+    }).select("firstName lastName email phone");
+
     res.status(200).json({ success: true, data: filteredUsers });
   } catch (error) {
+    console.error("Error fetching users:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };

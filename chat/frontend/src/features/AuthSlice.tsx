@@ -97,6 +97,7 @@ const RegistrationSlice = createSlice({
       .addCase(sendOtp.fulfilled, (state, action) => {
         state.loading = false;
         state.sendOtpState = action.payload;
+        localStorage.setItem("loginMain", action.payload);
       })
       .addCase(sendOtp.rejected, (state, action) => {
         state.loading = false;
@@ -132,6 +133,6 @@ export const {
   resetVerifyOtpState,
   connectSocker,
   disconnectSocker,
-  setOnlineUsers
+  setOnlineUsers,
 } = RegistrationSlice.actions;
 export default RegistrationSlice.reducer;

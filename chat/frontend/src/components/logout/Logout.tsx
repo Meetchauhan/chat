@@ -8,6 +8,7 @@ import {
 import { getProfile } from "../../features/ProfileSlice";
 import { useNavigate } from "react-router-dom";
 import { closeToast } from "../../features/ToastSlice";
+import { closeMenu } from "../../features/mobileMenuSlice";
 
 const Logout = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,6 +21,7 @@ const Logout = () => {
       navigate("/login", { replace: true });
       dispatch(closeToast());
       dispatch(disconnectSocker());
+      dispatch(closeMenu());
     }
   };
   return (

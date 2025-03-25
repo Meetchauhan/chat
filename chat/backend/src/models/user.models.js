@@ -1,14 +1,27 @@
 import mongoose from "mongoose";
 
-const connectedUsers = new mongoose.Schema({
+const connectionSchema = new mongoose.Schema({
   userId: {
-    type: mongoose.Schema.Types.ObjectId, // Storing user ID as ObjectId
+    type: mongoose.Schema.Types.ObjectId, // Connected user's ID
     ref: "User",
     required: true,
   },
   status: {
     type: String,
-    enum: ["pending", "accepted"],
+    enum: ["accepted"], // Only stores confirmed connections
+    default: "accepted",
+  },
+});
+
+const requestSchema = new mongoose.Schema({
+  senderId: {
+    type: mongoose.Schema.Types.ObjectId, // User who sent the request
+    ref: "User",
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ["pending", "confirm"],
     default: "pending",
   },
 });
@@ -34,9 +47,9 @@ const userSchema = new mongoose.Schema(
     otp: {
       type: Number,
     },
-    connectedUsers: [connectedUsers],
+    connectedUsers: [connectionSchema], // Stores accepted connections
+    requests: [requestSchema], // Stores incoming requests
   },
-
   {
     timestamps: true,
   }

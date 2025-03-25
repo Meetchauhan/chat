@@ -44,7 +44,7 @@ export const login = async (req, res) => {
       const otp = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
       console.log("otp", otp);
       user.otp = otp;
-      await otpMail(res, otp);
+      // await otpMail(res, otp);
       await user.save();
       generateToken(res, user._id);
       res.status(200).json({

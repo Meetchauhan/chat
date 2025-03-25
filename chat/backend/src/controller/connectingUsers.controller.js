@@ -1,107 +1,200 @@
 import User from "../models/user.models.js";
 
 export const sendConnectionRequest = async (req, res) => {
-    const { recieverId } = req.body;
-    try {
-      const loggedInUserId = req?.user?._id;
-      const receiverUser = await User.findById(recieverId);
-      if (!receiverUser) {
-        return res.status(404).json({ message: "Receiver user not found" });
-      }
-  
-      const existingRequest = receiverUser.connectedUsers?.find(
-        (conn) => conn.userId.toString() === loggedInUserId.toString()
-      );
-  
-      if (existingRequest) {
-        return res
-          .status(400)
-          .json({ message: "Connection request already sent" });
-      }
-  
-      // Push sender's ID into receiver's connections array
-      receiverUser.connectedUsers?.push({
-        userId: loggedInUserId,
-        status: "pending",
-      });
-  
-      // Save the updated user document
-      await receiverUser.save();
-  
-      res.status(200).json({
-        success: true,
-        message: "Connection request sent successfully",
-        data: receiverUser,
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "Server error",
-      });
+  const { recieverId } = req.body;
+  const loggedInUserId = req?.user?._id; // Sender ID
+
+  try {
+    if (!loggedInUserId) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
-  };
-  
-  export const acceptConnectionRequest = async (req, res) => {
-    const { recieverId } = req.body; // The original sender's ID (meet@gmail.com)
-    const loggedInUserId = req?.user?._id; // The receiver who is accepting the request (meet22@gmail.com)
-  
-    try {
-      if (!loggedInUserId) {
-        return res.status(401).json({ message: "Unauthorized: User not logged in" });
-      }
-  
-      // ✅ Step 1: Update logged-in user's connection list (meet22@gmail.com)
-      const receiverUser = await User.findOneAndUpdate(
-        {
-          _id: loggedInUserId,  // Update the receiver's (meet22@gmail.com) document
-          "connectedUsers.userId": recieverId,  // Find the sender's (meet@gmail.com) request
-          "connectedUsers.status": "pending", // Ensure it's still pending
-        },
-        { $set: { "connectedUsers.$.status": "accepted" } }, // Accept the request
-        { new: true } // Return updated document
-      );
-  
-      if (!receiverUser) {
-        return res.status(404).json({ message: "No pending request found to accept" });
-      }
-  
-      // ✅ Step 2: Update sender's connection list (meet@gmail.com)
-      const senderUser = await User.findById(recieverId);
-  
-      if (!senderUser) {
-        return res.status(404).json({ message: "Sender user not found" });
-      }
-  
-      // Check if the receiver already exists in sender's connections
-      const existingConnectionIndex = senderUser.connectedUsers?.findIndex(
-        (conn) => conn.userId.toString() === loggedInUserId.toString()
-      );
-  
-      if (existingConnectionIndex !== -1) {
-        // Update existing connection status
-        senderUser.connectedUsers[existingConnectionIndex].status = "accepted";
-      } else {
-        // Otherwise, add new connection
-        senderUser.connectedUsers.push({
-          userId: loggedInUserId,
-          status: "accepted",
-        });
-      }
-  
-      await senderUser.save(); // Save sender's updated connections
-  
-      res.status(200).json({
-        success: true,
-        message: "Connection request accepted",
-        receiver: receiverUser,
-        sender: senderUser,
-      });
-    } catch (error) {
-      console.error("Error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Server error",
-        error: error.message,
-      });
+
+    const receiverUser = await User.findById(recieverId);
+    const senderUser = await User.findById(loggedInUserId);
+
+    if (!receiverUser || !senderUser) {
+      return res.status(404).json({ message: "User not found" });
     }
-  };
+
+    // ✅ Check if request already exists in receiver's requests
+    const existingRequest = receiverUser.requests.find(
+      (req) => req.senderId.toString() === loggedInUserId.toString()
+    );
+
+    if (existingRequest) {
+      return res.status(400).json({ message: "Connection request already sent" });
+    }
+
+    // ✅ Determine request status based on receiver's online status
+    // const isReceiverLoggedIn = receiverUser?.isLoggedIn || false;
+    // const requestStatus = isReceiverLoggedIn ? "confirm" : "pending";
+
+    const requestStatus =  "pending";
+
+    // ✅ Add request to receiver's `requests` array
+    receiverUser.requests.push({
+      senderId: loggedInUserId,
+      status: requestStatus,
+    });
+
+    await receiverUser.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Connection request sent successfully",
+      request: {
+        senderId: loggedInUserId,
+        status: requestStatus,
+      },
+    });
+  } catch (error) {
+    console.error("Error sending request:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+
+export const getUserRequests = async (req, res) => {
+  const loggedInUserId = req?.user?._id; // Logged-in user
+
+  try {
+    if (!loggedInUserId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const user = await User.findById(loggedInUserId).select("requests").populate({
+      path: "requests.senderId",
+      select: "firstName lastName email",
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      requests: user.requests,
+    });
+  } catch (error) {
+    console.error("Error getting user requests:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+export const getSentRequests = async (req, res) => {
+  const loggedInUserId = req?.user?._id; // Logged-in user
+
+  try {
+    if (!loggedInUserId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // Find users where the logged-in user is the sender in `requests` array
+    const usersWithRequests = await User.find({ "requests.senderId": loggedInUserId })
+      .select("firstName lastName email requests")
+      .populate({
+        path: "requests.senderId",
+        select: "firstName lastName email",
+      });
+
+    // Filter out only the requests sent by the logged-in user
+    const sentRequests = usersWithRequests.map((user) => ({
+      userId: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      status: user.requests.find(
+        (req) => req.senderId.toString() === loggedInUserId.toString()
+      )?.status,
+    }));
+
+    res.status(200).json({
+      success: true,
+      sentRequests,
+    });
+  } catch (error) {
+    console.error("Error getting sent requests:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
+
+
+
+export const acceptConnectionRequest = async (req, res) => {
+  const { recieverId } = req.body; // The sender's ID (who originally sent the request)
+  const loggedInUserId = req?.user?._id; // The user accepting the request
+
+  try {
+    if (!loggedInUserId) {
+      return res.status(401).json({ message: "Unauthorized: User not logged in" });
+    }
+
+    // Find receiver (logged-in user) and ensure the request exists
+    const receiverUser = await User.findById(loggedInUserId);
+    const senderUser = await User.findById(recieverId);
+
+    if (!receiverUser || !senderUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Find the request in receiver's requests array
+    const requestIndex = receiverUser.requests.findIndex(
+      (req) => req.senderId.toString() === recieverId.toString()
+    );
+
+    if (requestIndex === -1) {
+      return res.status(400).json({ message: "No pending request found" });
+    }
+
+    // Remove request from receiver's requests array
+    receiverUser.requests.splice(requestIndex, 1);
+
+    // Add sender to receiver's connectedUsers
+    receiverUser.connectedUsers.push({
+      userId: recieverId,
+      status: "accepted",
+    });
+
+    // Add receiver to sender's connectedUsers
+    senderUser.connectedUsers.push({
+      userId: loggedInUserId,
+      status: "accepted",
+    });
+
+    // Save both users
+    await receiverUser.save();
+    await senderUser.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Connection request accepted",
+      receiver: {
+        userId: receiverUser._id,
+        connectedUsers: receiverUser.connectedUsers,
+      },
+      sender: {
+        userId: senderUser._id,
+        connectedUsers: senderUser.connectedUsers,
+      },
+    });
+  } catch (error) {
+    console.error("Error accepting request:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
