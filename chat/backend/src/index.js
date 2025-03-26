@@ -9,6 +9,7 @@ import registerRoute from "./routes/user.routes.js";
 import messageRoute from "./routes/message.routes.js";
 import connecUsersRoute from "./routes/connectingUsers.routes.js";
 import { app, server } from "./util/socket.js";
+import path from "path";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
