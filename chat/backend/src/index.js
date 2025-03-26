@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config();
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173","https://chat-i7if.onrender.com"],
     // allowedHeaders: ["*"],
     credentials: true,
   })
