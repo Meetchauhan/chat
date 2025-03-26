@@ -25,8 +25,8 @@ const UsersItem = ({ firstName, lastName, _id }: UsersItemType) => {
 
   return (
     <div className="px-3" onClick={() => handleSelectUser()}>
-      <button className="py-2 px-2 lg:px-5 my-2 flex items-center gap-5 w-full cursor-pointer hover:bg-gray-800 rounded-md">
-        <div className="relative text-[16px] lg:text-xl text-white bg-gray-600 rounded-full py-2.5 px-3 uppercase w-[45px] lg:w-[50px]">
+      <button className="py-2 px-2 lg:px-5 my-1 flex items-center gap-5 w-full cursor-pointer hover:bg-gray-800 rounded-md border-b-[1px] border-orange-600">
+        <div className="relative text-[16px]text-[16px] text-white bg-gray-600 rounded-full py-2.5 px-3 uppercase w-[45px]">
           {firstNameInitial}
           {lastNameInitial}
           {onlineUser?.includes(_id) ? (
@@ -56,7 +56,7 @@ const UsersItem = ({ firstName, lastName, _id }: UsersItemType) => {
             </span>
           )}
         </div>
-        <div className="text-[17px] lg:text-[18px] xl:text-xl text-white capitalize font-normal">
+        <div className="text-[17px] lg:text-[18px] text-white capitalize font-normal">
           {firstName} {lastName}
         </div>
       </button>

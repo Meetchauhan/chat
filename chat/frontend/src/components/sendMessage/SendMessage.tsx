@@ -36,8 +36,8 @@ const SendMessage = () => {
     }
   };
   return (
-    <form onSubmit={handleSubmit} className="w-full relative z-10 px-10">
-      <div className=" flex items-start justify-center w-full gap-5 py-4">
+    <form onSubmit={handleSubmit} className="w-full relative z-10 px-5 md:px-10">
+      <div className=" flex items-center justify-center w-full gap-5 py-4">
         <ChatInput
           type="text"
           name="chat"

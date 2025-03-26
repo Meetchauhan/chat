@@ -23,17 +23,18 @@ const Home = () => {
       };
     }
   }, [dispatch, socket]);
+  
 
   return (
     <>
-      <div className="hidden md:flex h-[calc(100dvh-72px)]">
+      <div className="hidden md:flex h-[calc(100dvh-73px)]">
         <Sidebar />
-        <div className="w-[75%] bg-gray-800 relative min-h-full h-[calc(100dvh-72px)] overflow-x-auto">
+        <div className="w-[75%] bg-gray-800 relative min-h-full h-[calc(100dvh-73px)] overflow-x-auto">
           {selectedUser ? <Chat /> : <NoChatSelected />}
         </div>
       </div>
-      <div className="flex md:hidden h-[calc(100dvh-56px)]">
-        <div className="w-full bg-gray-800 relative min-h-full h-[calc(100dvh-56px)] overflow-x-auto">
+      <div className="flex md:hidden h-[calc(100dvh-53px)]">
+        <div className="w-full bg-gray-800 relative min-h-full h-[calc(100dvh-53px)] overflow-x-auto">
           {selectedUser ? <Chat /> : <Sidebar />}
         </div>
       </div>

@@ -21,9 +21,9 @@ const Request = () => {
   console.log("getRequests", getRequests);
 
   return (
-    <div className="h-[calc(100dvh-72px)] bg-gray-900">
+    <div className="h-[calc(100dvh-53px)] md:h-[calc(100dvh-73px)] bg-gray-900">
       <div className="w-full sm:w-[70%] md:w-[50%] mx-auto px-2">
-        <h2 className="text-white text-center text-3xl mb-5">Requests</h2>
+        <h2 className="text-white text-center text-xl md:text-2xl lg:md:text-3xl mb-5 pt-5">Requests</h2>
         <div className="bg-gray-700 p-5 flex flex-col gap-5 max-h-[70dvh] md:max-h-[75dvh] lg:max-h-[80dvh] overflow-auto">
           {getRequests?.length > 0 ? (
             getRequests?.map((item) => (

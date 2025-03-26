@@ -6,11 +6,12 @@ import { AppDispatch, RootState } from "../../store/store";
 import { RegistrationSchema } from "../../validationSchema/RegistrationSchema";
 import Input from "../../components/formComponents/Input";
 import Button from "../../components/formComponents/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const dispatch = useDispatch<AppDispatch>();
   const loading = useSelector((item: RootState) => item?.registration?.loading);
+  const navigate = useNavigate();
   const initialValue = {
     firstName: "",
     lastName: "",
@@ -24,6 +25,7 @@ const Register = () => {
     onSubmit: (value, action) => {
       console.log("register value", value);
       dispatch(userRegistration(value));
+      navigate("/login", { replace: true });
       action.resetForm();
     },
   });
@@ -75,7 +77,10 @@ const Register = () => {
           <Button type="submit" title="Register" disabled={loading} />
         </form>
         <div className="mt-2 text-amber-50 text-center">
-          Already have an account? please <Link to={"/login"} className="text-orange-600 underline">Login</Link>
+          Already have an account? please{" "}
+          <Link to={"/login"} className="text-orange-600 underline">
+            Login
+          </Link>
         </div>
       </div>
     </div>

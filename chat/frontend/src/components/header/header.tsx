@@ -8,6 +8,11 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { getRequest } from "../../features/SendRequestSlice";
 import { closeMenu, openMenu } from "../../features/mobileMenuSlice";
+import chatHomeIcon from "../../images/chatHome.svg";
+import requestIcon from "../../images/request.svg";
+import searchUserIcon from "../../images/searchUser.svg";
+import logoutIcon from "../../images/logoutIcon.svg";
+import logo from "../../images/fav.svg";
 
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,22 +37,25 @@ const Header = () => {
   const isMenuOpen = useSelector((item: RootState) => item?.menu?.value);
 
   return (
-    <header className="bg-gray-900  p-3 md:p-5 relative">
-      <nav className="flex justify-between items-center">
+    <header className="bg-gray-900  p-3 px-5 md:p-5 relative border-b-[1px] border-white">
+      <nav className="flex justify-between items-center ">
         {profile?.success && (
           <div className="flex flex-row-reverse">
+            <Link to="/" className="block md:hidden">
+              <img src={logo} alt="logo" />
+            </Link>
             <div className="hidden md:block">
               <Logout />
             </div>
             {selectedUser !== null && (
               <button
-                className="text-orange-600 rotate-270 lg:hidden"
+                className="text-orange-600  mr-5 rotate-270 lg:hidden"
                 onClick={userList}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="30px"
-                  height="30px"
+                  width="28px"
+                  height="28px"
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -62,53 +70,55 @@ const Header = () => {
             )}
           </div>
         )}
-        <div className="flex items-center gap-5">
-          <div className="hidden md:flex items-center gap-5 ">
-            <div className="text-orange-600">
-              <Link to={"/"} className="">
-                <img
-                  src="/public/chatHome.svg"
-                  alt="chat"
-                  className="w-[25px] h-[25px]"
-                />
-              </Link>
+        {profile?.success && (
+          <div className="flex items-center gap-5">
+            <div className="hidden md:flex items-center gap-5 ">
+              <div className="text-orange-600">
+                <Link to={"/"} className="">
+                  <img
+                    src={chatHomeIcon}
+                    alt="chat"
+                    className="w-[25px] h-[25px]"
+                  />
+                </Link>
+              </div>
+              <div className="text-orange-600">
+                <Link to={"/find-users"} className="">
+                  <img
+                    src={searchUserIcon}
+                    alt="searchUser"
+                    className="w-[25px] h-[25px]"
+                  />
+                </Link>
+              </div>
+              <div className="text-orange-600">
+                <Link to={"/request"} className="relative">
+                  <span className="bg-white absolute top-[-7px] right-[-2px] w-[16px] h-[16px] text-[12px] rounded-full flex justify-center items-center font-bold">
+                    {getRequests?.length > 0 ? getRequests?.length : 0}
+                  </span>
+                  <img
+                    src={requestIcon}
+                    alt="request"
+                    className="w-[25px] h-[25px]"
+                  />
+                </Link>
+              </div>
             </div>
-            <div className="text-orange-600">
-              <Link to={"/find-users"} className="">
-                <img
-                  src="/public/searchUser.svg"
-                  alt="searchUser"
-                  className="w-[25px] h-[25px]"
-                />
-              </Link>
+            <div className="text-orange-600 text-xl md:text-2xl hidden md:block">
+              {profile?.data?.firstName} {profile?.data?.lastName}
             </div>
-            <div className="text-orange-600">
-              <Link to={"/request"} className="relative">
-                <span className="bg-white absolute top-[-7px] right-[-2px] w-[16px] h-[16px] text-[12px] rounded-full flex justify-center items-center font-bold">
-                  {getRequests?.length > 0 ? getRequests?.length : 0}
-                </span>
-                <img
-                  src="/public/request.svg"
-                  alt="request"
-                  className="w-[25px] h-[25px]"
-                />
-              </Link>
-            </div>
+            <button
+              onClick={handleOpenMenu}
+              className="text-orange-600 text-xl md:text-2xl block md:hidden"
+            >
+              {profile?.data?.firstName} {profile?.data?.lastName}
+            </button>
           </div>
-          <div className="text-orange-600 text-2xl hidden md:block">
-            {profile?.data?.firstName} {profile?.data?.lastName}
-          </div>
-          <button
-            onClick={handleOpenMenu}
-            className="text-orange-600 text-2xl block md:hidden"
-          >
-            {profile?.data?.firstName} {profile?.data?.lastName}
-          </button>
-        </div>
+        )}
       </nav>
       <div
-        className={`block md:hidden bg-black absolute top-0 left-0 z-20 h-[100dvh] w-[400px] p-5 ${
-          isMenuOpen ? "translate-x-0" : "translate-x-[-500px]"
+        className={`block md:hidden bg-black absolute top-0 left-0 z-20 h-[100dvh] w-[90%] sm:w-[400px] p-5 ${
+          isMenuOpen ? "translate-x-0" : "translate-x-[-600px]"
         } ease-in-out duration-300`}
       >
         <button
@@ -124,11 +134,13 @@ const Header = () => {
               onClick={() => dispatch(closeMenu())}
               className="flex gap-7 items-center px-1"
             >
-              <img
-                src="/public/chatHome.svg"
-                alt="searchUser"
-                className="w-[25px] h-[25px]"
-              />
+              <div className="w-[30px]">
+                <img
+                  src={chatHomeIcon}
+                  alt="searchUser"
+                  className="w-[25px] h-[25px]"
+                />
+              </div>
               <span className="text-[18px]">Chat</span>
             </Link>
           </li>
@@ -138,11 +150,13 @@ const Header = () => {
               onClick={() => dispatch(closeMenu())}
               className="flex gap-7 items-center px-1"
             >
-              <img
-                src="/public/searchUser.svg"
-                alt="searchUser"
-                className="w-[25px] h-[25px]"
-              />
+              <div className="w-[30px]">
+                <img
+                  src={searchUserIcon}
+                  alt="searchUser"
+                  className="w-[25px] h-[25px]"
+                />
+              </div>
               <span className="text-[18px]">Find Users</span>
             </Link>
           </li>
@@ -156,17 +170,28 @@ const Header = () => {
                 <span className="bg-white absolute top-[-7px] left-[12px] w-[16px] h-[16px] text-[12px] rounded-full flex justify-center items-center font-bold">
                   {getRequests?.length > 0 ? getRequests?.length : 0}
                 </span>
-                <img
-                  src="/public/request.svg"
-                  alt="request"
-                  className="w-[25px] h-[25px]"
-                />
+                <div className="w-[30px]">
+                  <img
+                    src={requestIcon}
+                    alt="request"
+                    className="w-[25px] h-[25px]"
+                  />
+                </div>
               </div>
               <span className="text-[18px]">Request</span>
             </Link>
           </li>
           <li className="p-1 border-b-2 border-orange-600 mb-5 px-1 text-[18px]">
-            <Logout />
+            <div className="flex items-center gap-7">
+              <div className="w-[30px]">
+                <img
+                  src={logoutIcon}
+                  alt="request"
+                  className="w-[25px] h-[25px]"
+                />
+              </div>
+              <Logout />
+            </div>
           </li>
         </ul>
       </div>

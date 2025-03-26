@@ -7,8 +7,8 @@ import { getUsers } from "../../features/ChatSlice";
 
 const UsersList = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const users = useSelector((item: RootState) => item?.chat?.users?.data);
-  console.log("users", users);
+  const users = useSelector((item: RootState) => item?.chat?.users?.data || []);
+  console.log("users", users?.length);
 
   useEffect(() => {
     dispatch(getUsers());
