@@ -2,12 +2,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RegisterUserState, UserRegisterPayload } from "../types/Types";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const userRegistration = createAsyncThunk(
   "userRegister",
   async ({ firstName, lastName, email, phone }: UserRegisterPayload) => {
     try {
       const response = await axios.post(
-        "http://localhost:1322/api/user/register",
+        `${API_BASE_URL}/user/register`,
         {
           firstName: firstName,
           lastName: lastName,

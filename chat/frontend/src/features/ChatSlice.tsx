@@ -3,8 +3,10 @@ import { Message, SendMessagePayload, UsersInitialState } from "../types/Types";
 import axios from "axios";
 import { Socket } from "socket.io-client";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const getUsers = createAsyncThunk("getUsers", async () => {
-  const response = await axios.get("http://localhost:1322/api/message/users", {
+  const response = await axios.get(`${API_BASE_URL}/message/users`, {
     withCredentials: true,
   });
   return response.data;
@@ -14,7 +16,7 @@ export const getMessages = createAsyncThunk(
   "getMessage",
   async (_id: string) => {
     const response = await axios.get(
-      `http://localhost:1322/api/message/${_id}`,
+      `${API_BASE_URL}/message/${_id}`,
       {
         withCredentials: true,
       }
@@ -27,7 +29,7 @@ export const sendMessage = createAsyncThunk(
   "sendMessage",
   async ({ selectedUserId, text }: SendMessagePayload) => {
     const response = await axios.post(
-      `http://localhost:1322/api/message/send/${selectedUserId}`,
+      `${API_BASE_URL}/message/send/${selectedUserId}`,
       { text },
       { withCredentials: true }
     );
@@ -54,7 +56,7 @@ export const subscribeToMessages = (
 
     // Ensure the message is meant for the currently selected chat
     console.log("messageLoading", messageLoading);
-    
+
     if (!messageLoading) {
       if (
         (newMessage.senderId === selectedUserId &&

@@ -2,9 +2,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { AcceptRequestSliceInitialState } from "../types/Types";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const acceptRequest = createAsyncThunk("acceptRequest", async (recieverId: string) => {
   const response = await axios.post(
-    "http://localhost:1322/api/acceptRequest",
+    `${API_BASE_URL}/acceptRequest`,
     { recieverId },
     { withCredentials: true }
   );

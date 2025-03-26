@@ -2,13 +2,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { UsersSliceInitialState } from "../types/Types";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const getAllUsers = createAsyncThunk("getAllUsers", async () => {
-  const response = await axios.get(
-    "http://localhost:1322/api/message/all-users",
-    {
-      withCredentials: true,
-    }
-  );
+  const response = await axios.get(`${API_BASE_URL}/message/all-users`, {
+    withCredentials: true,
+  });
   return response.data;
 });
 

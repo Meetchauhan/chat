@@ -3,18 +3,16 @@ import axios from "axios";
 import { SendOtpPayload, SendOtpState, VerifyOtp } from "../types/Types";
 import io from "socket.io-client";
 
-const BASE_URL = "http://localhost:1322";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const sendOtp = createAsyncThunk(
   "sendOtp",
   async ({ email }: SendOtpPayload) => {
     try {
-      const response = await axios.post(
-        "http://localhost:1322/api/user/login",
-        {
-          email,
-        }
-      );
+      const response = await axios.post(`${API_BASE_URL}/user/login`, {
+        email,
+      });
       return response.data;
     } catch (error: unknown) {
       console.error("Error in user registration", error);
@@ -27,7 +25,7 @@ export const verifyOtp = createAsyncThunk(
   async ({ otp }: VerifyOtp) => {
     try {
       const response = await axios.post(
-        "http://localhost:1322/api/user/verifyOTP",
+        `${API_BASE_URL}/user/verifyOTP`,
         {
           otp,
         },
@@ -42,7 +40,7 @@ export const verifyOtp = createAsyncThunk(
 
 export const logout = createAsyncThunk("logout", async () => {
   const response = await axios.post(
-    "http://localhost:1322/api/user/logout",
+    `${API_BASE_URL}/user/logout`,
     {},
     { withCredentials: true }
   );

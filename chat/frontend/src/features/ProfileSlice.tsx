@@ -2,8 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ProfileInitialState } from "../types/Types";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const getProfile = createAsyncThunk("profile", async () => {
-  const respose = await axios.get("http://localhost:1322/api/user/profile", {
+  const respose = await axios.get(`${API_BASE_URL}/user/profile`, {
     withCredentials: true,
   });
   return respose.data;

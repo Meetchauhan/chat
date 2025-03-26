@@ -2,11 +2,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { SendRequestSliceInitialState } from "../types/Types";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const sendRequest = createAsyncThunk(
   "sendRequest",
   async (recieverId: string) => {
     const response = await axios.post(
-      "http://localhost:1322/api/sendRequest",
+      `${API_BASE_URL}/sendRequest`,
       { recieverId },
       { withCredentials: true }
     );
@@ -15,14 +17,14 @@ export const sendRequest = createAsyncThunk(
 );
 
 export const getRequest = createAsyncThunk("getRequest", async () => {
-  const response = await axios.get("http://localhost:1322/api/getRequest", {
+  const response = await axios.get(`${API_BASE_URL}/getRequest`, {
     withCredentials: true,
   });
   return response.data;
 });
 
 export const sentRequest = createAsyncThunk("sentRequest", async () => {
-  const response = await axios.get("http://localhost:1322/api/sentRequest", {
+  const response = await axios.get(`${API_BASE_URL}/sentRequest`, {
     withCredentials: true,
   });
   return response.data;
