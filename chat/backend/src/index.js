@@ -17,9 +17,10 @@ const __dirname = path.dirname(__filename);
 // const server = createServer(app);
 
 dotenv.config();
+const PORT = process.env.PORT || 1322;
 app.use(
   cors({
-    origin: ["http://localhost:5173","https://chat-i7if.onrender.com"],
+    origin: ["http://localhost:5173", "https://chat-i7if.onrender.com"],
     // allowedHeaders: ["*"],
     credentials: true,
   })
@@ -41,25 +42,10 @@ app.use("/api/user", registerRoute);
 app.use("/api/message", messageRoute);
 app.use("/api", connecUsersRoute);
 
-app.get("/", (req, res) => {
-  res.send("Server is started");
-});
-
-// io.on("connection", (socket) => {
-//   console.log("✅ User connected:", socket.id);
-
-//   socket.on("message", (msg) => {
-//     console.log("📩 Message received:", msg);
-//     io.emit("message", msg);
-//   });
-
-//   socket.on("disconnect", () => {
-//     console.log("❌ User disconnected:", socket.id);
-//   });
+// app.get("/", (req, res) => {
+//   res.send("Server is started");
 // });
 
-// ✅ Fix: Listen on `server`, NOT `app`
-const PORT = 1322;
 
 app.use(express.static(path.join(__dirname, "../../frontend/dist"))); // Adjust path if needed
 
