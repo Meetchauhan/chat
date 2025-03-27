@@ -1,8 +1,16 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 
-const useGetAllUsers = () => {
-  const allUsers = useSelector((item: RootState) => item?.users?.data?.data || []);
+export const useGetAllUsers = () => {
+  const allUsers = useSelector(
+    (item: RootState) => item?.users?.data?.data || []
+  );
   return allUsers;
 };
-export default useGetAllUsers;
+
+export const useGetAllUsersLoading = () => {
+  const allUsersLoading = useSelector(
+    (item: RootState) => item?.users?.loading
+  );
+  return allUsersLoading;
+};

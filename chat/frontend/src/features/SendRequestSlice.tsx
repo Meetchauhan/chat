@@ -33,8 +33,10 @@ export const sentRequest = createAsyncThunk("sentRequest", async () => {
 const initialState: SendRequestSliceInitialState = {
   data: null,
   loading: false,
+  getRequestLoading: false,
   error: null,
   sendRequest: null,
+  sentRequestLoading: false,
 };
 
 const sendRequestSlice = createSlice({
@@ -55,25 +57,25 @@ const sendRequestSlice = createSlice({
         state.error = action.error.message || "Something is wrong";
       })
       .addCase(getRequest.pending, (state) => {
-        state.loading = true;
+        state.getRequestLoading = true;
       })
       .addCase(getRequest.fulfilled, (state, action) => {
-        state.loading = false;
+        state.getRequestLoading = false;
         state.data = action.payload;
       })
       .addCase(getRequest.rejected, (state, action) => {
-        state.loading = false;
+        state.getRequestLoading = false;
         state.error = action.error.message || "Something is wrong";
       })
       .addCase(sentRequest.pending, (state) => {
-        state.loading = true;
+        state.sentRequestLoading = true;
       })
       .addCase(sentRequest.fulfilled, (state, action) => {
-        state.loading = false;
+        state.sentRequestLoading = false;
         state.sendRequest = action.payload;
       })
       .addCase(sentRequest.rejected, (state, action) => {
-        state.loading = false;
+        state.sentRequestLoading = false;
         state.error = action.error.message || "Something is wrong";
       });
   },

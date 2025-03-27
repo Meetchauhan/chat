@@ -8,15 +8,12 @@ export const userRegistration = createAsyncThunk(
   "userRegister",
   async ({ firstName, lastName, email, phone }: UserRegisterPayload) => {
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/user/register`,
-        {
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          phone: phone,
-        }
-      );
+      const response = await axios.post(`${API_BASE_URL}/user/register`, {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone: phone,
+      });
       return response.data;
     } catch (error: unknown) {
       console.error("Error in user registration", error);
@@ -33,7 +30,11 @@ const initialState: RegisterUserState = {
 const RegistrationSlice = createSlice({
   name: "registration",
   initialState,
-  reducers: {},
+  reducers: {
+    resetRegisterState: (state) => {
+      state.data = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(userRegistration.pending, (state) => {
@@ -49,5 +50,5 @@ const RegistrationSlice = createSlice({
       });
   },
 });
-
+export const { resetRegisterState } = RegistrationSlice.actions;
 export default RegistrationSlice.reducer;

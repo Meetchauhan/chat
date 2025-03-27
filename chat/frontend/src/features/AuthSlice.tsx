@@ -68,7 +68,6 @@ const RegistrationSlice = createSlice({
     },
     connectSocker: (state, action) => {
       const userId = action.payload.userId;
-      console.log("userId", userId);
 
       if (!state.socket && userId) {
         const socket = io(BASE_URL, { query: { userId } });

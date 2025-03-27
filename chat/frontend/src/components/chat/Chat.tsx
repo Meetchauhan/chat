@@ -12,7 +12,7 @@ import {
   // unSubscribeToMessage,
 } from "../../features/ChatSlice";
 import { formateMessageTime } from "../../utils/Utils";
-import useProfile from "../../customHooks/useProfile";
+import {useProfile} from "../../customHooks/useProfile";
 import useOnlineUser from "../../customHooks/useOnlineUser";
 
 const Chat = () => {

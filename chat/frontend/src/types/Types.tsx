@@ -44,7 +44,11 @@ export interface UserRegisterPayload {
 
 export interface RegisterUserState {
   loading: boolean;
-  data: unknown;
+  data: {
+    success: boolean;
+    message: string;
+    data: unknown;
+  } | null;
   error: null | string | undefined;
 }
 
@@ -191,6 +195,15 @@ export interface FindUsersType {
   requests: [{ status: string }];
 }
 
+export interface FindUsersItemType {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  // connectedUsers: [{ status: string }];
+  // requests: [{ status: string }];
+  handleUsers: (_id: string) => void;
+}
+
 export interface SendRequestSliceInitialState {
   data: {
     success: boolean;
@@ -206,6 +219,8 @@ export interface SendRequestSliceInitialState {
     ];
   } | null;
   loading: boolean;
+  getRequestLoading: boolean;
+  sentRequestLoading: boolean;
   error: null | string;
   sendRequest:
     | [
@@ -227,6 +242,7 @@ export interface AcceptRequestSliceInitialState {
 export interface SentRequestDataType {
   sendRequest: {
     sendRequest: {
+      loading: boolean;
       sentRequests: [
         {
           userId: string;
@@ -235,4 +251,15 @@ export interface SentRequestDataType {
       ];
     };
   };
+}
+
+export interface PageTitleType {
+  title: string;
+}
+
+export interface RequestItemType {
+  senderId: string;
+  firstName: string;
+  lastName: string;
+  handleAcceptRequest: (senderId: string) => void;
 }

@@ -1,13 +1,14 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import UsersList from "../usersList/UsersList";
-import { AppDispatch, RootState } from "../../store/store";
+import { AppDispatch } from "../../store/store";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { getUsers } from "../../features/ChatSlice";
+import { useGetChatUsers } from "../../customHooks/useGetChatUsers";
 
 const Sidebar = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const users = useSelector((item: RootState) => item?.chat?.users?.data || []);
+  const users = useGetChatUsers()
   useEffect(() => {
     dispatch(getUsers());
   }, [dispatch]);

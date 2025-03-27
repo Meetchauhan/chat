@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import useProfile from "../../customHooks/useProfile";
+import { useProfile, useProfileLoading } from "../../customHooks/useProfile";
 import Logout from "../logout/Logout";
 import { AppDispatch, RootState } from "../../store/store";
 import { getUsers, removeSelectUser } from "../../features/ChatSlice";
@@ -13,10 +13,16 @@ import requestIcon from "../../images/request.svg";
 import searchUserIcon from "../../images/searchUser.svg";
 import logoutIcon from "../../images/logoutIcon.svg";
 import logo from "../../images/fav.svg";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { useRequestLoading } from "../../customHooks/useGetRequest";
 
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
   const profile = useProfile();
+  const profileLoading = useProfileLoading();
+  const requestLoading = useRequestLoading();
+  console.log("request loading", requestLoading);
+  
   const userList = () => {
     dispatch(removeSelectUser());
     dispatch(getUsers());
@@ -95,7 +101,16 @@ const Header = () => {
                 <div className="text-orange-600">
                   <Link to={"/request"} className="relative">
                     <span className="bg-white absolute top-[-7px] right-[-2px] w-[16px] h-[16px] text-[12px] rounded-full flex justify-center items-center font-bold">
-                      {getRequests?.length > 0 ? getRequests?.length : 0}
+                      {requestLoading ? (
+                        <SkeletonTheme
+                          baseColor="#39424e"
+                          highlightColor="#f54a00"
+                        >
+                          <Skeleton width={15} height={20} duration={0.9} />
+                        </SkeletonTheme>
+                      ) : (
+                        <>{getRequests?.length > 0 ? getRequests?.length : 0}</>
+                      )}
                     </span>
                     <img
                       src={requestIcon}
@@ -106,13 +121,29 @@ const Header = () => {
                 </div>
               </div>
               <div className="text-orange-600 text-xl md:text-2xl hidden md:block">
-                {profile?.data?.firstName} {profile?.data?.lastName}
+                {profileLoading ? (
+                  <SkeletonTheme baseColor="#39424e" highlightColor="#f54a00">
+                    <Skeleton width={150} height={30} duration={0.9} />
+                  </SkeletonTheme>
+                ) : (
+                  <>
+                    {profile?.data?.firstName} {profile?.data?.lastName}
+                  </>
+                )}
               </div>
               <button
                 onClick={handleOpenMenu}
                 className="text-orange-600 text-xl md:text-2xl block md:hidden"
               >
-                {profile?.data?.firstName} {profile?.data?.lastName}
+                {profileLoading ? (
+                  <SkeletonTheme baseColor="#39424e" highlightColor="#f54a00">
+                    <Skeleton width={120} height={25} duration={0.9} />
+                  </SkeletonTheme>
+                ) : (
+                  <>
+                    {profile?.data?.firstName} {profile?.data?.lastName}
+                  </>
+                )}
               </button>
             </div>
           )}

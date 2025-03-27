@@ -3,6 +3,8 @@ import { RootState } from "../../store/store";
 import VerifyOtp from "../../components/verifyOtp/VerifyOtp";
 import SendOtp from "../../components/sendOtp/SendOtp";
 import ToastError from "../../components/toastError/ToastError";
+import { useProfileLoading } from "../../customHooks/useProfile";
+import Loading from "../../components/loading/Loading";
 
 const Login = () => {
   const isOtpSent = useSelector(
@@ -11,8 +13,6 @@ const Login = () => {
   const isOtpVerify = useSelector(
     (item: RootState) => item?.auth?.verifyOtpState?.success
   );
-  console.log("otp verify", isOtpVerify);
-  
 
   const sendOtpErrorMessage = useSelector(
     (item: RootState) => item?.auth?.sendOtpState?.message
@@ -21,11 +21,13 @@ const Login = () => {
   const verifyOtpErrorMessage = useSelector(
     (item: RootState) => item?.auth?.verifyOtpState?.message
   );
-
   const isToast = useSelector((item: RootState) => item?.toast?.value);
-  console.log("is toast", isToast);
 
-  return (
+  const profileLoading = useProfileLoading();
+
+  return profileLoading ? (
+    <Loading />
+  ) : (
     <>
       {isToast && (
         <ToastError
@@ -48,7 +50,6 @@ const Login = () => {
         ) : (
           <SendOtp />
         )}
-        
       </div>
     </>
   );

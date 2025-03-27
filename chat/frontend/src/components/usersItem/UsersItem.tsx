@@ -9,7 +9,6 @@ const UsersItem = ({ firstName, lastName, _id }: UsersItemType) => {
   const firstNameInitial = firstName?.slice(0, 1);
   const lastNameInitial = lastName?.slice(0, 1);
   const onlineUser = useOnlineUser();
-  console.log("online users", onlineUser);
 
   const handleSelectUser = () => {
     dispatch(
@@ -20,7 +19,6 @@ const UsersItem = ({ firstName, lastName, _id }: UsersItemType) => {
       })
     );
     dispatch(getMessages(_id)); 
-    console.log("selected user id", _id);
   };
 
   return (

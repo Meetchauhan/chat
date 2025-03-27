@@ -23,7 +23,6 @@ const Home = () => {
       };
     }
   }, [dispatch, socket]);
-  
 
   return (
     <>
