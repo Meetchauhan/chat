@@ -38,6 +38,7 @@ const Header = () => {
 
   const handleOpenMenu = () => {
     dispatch(openMenu());
+    dispatch(getRequest())
   };
 
   const isMenuOpen = useSelector((item: RootState) => item?.menu?.value);
