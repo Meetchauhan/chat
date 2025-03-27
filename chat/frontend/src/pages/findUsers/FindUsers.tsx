@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store";
 import { useEffect } from "react";
 import { getAllUsers } from "../../features/UsersSlice";
-import { getRequest, sentRequest } from "../../features/SendRequestSlice";
+import {  sentRequest } from "../../features/SendRequestSlice";
 import PageTitle from "../../components/pageTitle/PageTitle";
 import FindUserList from "../../components/findUserList/FindUserList";
 
@@ -14,7 +14,7 @@ const FindUsers = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getRequest());
+    // dispatch(getRequest());
     dispatch(sentRequest());
   }, [dispatch]);
 
