@@ -33,7 +33,7 @@ const SendOtp = () => {
       }
     },
   });
-
+ 
   useEffect(() => {
     if (isOtpSent === false) {
       dispatch(showToast());
