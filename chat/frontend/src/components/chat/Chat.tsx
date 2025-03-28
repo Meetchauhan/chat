@@ -12,8 +12,9 @@ import {
   // unSubscribeToMessage,
 } from "../../features/ChatSlice";
 import { formateMessageTime } from "../../utils/Utils";
-import {useProfile} from "../../customHooks/useProfile";
+import { useProfile } from "../../customHooks/useProfile";
 import useOnlineUser from "../../customHooks/useOnlineUser";
+import Loading from "../loading/Loading";
 
 const Chat = () => {
   const selectedUser = useSelectedUser();
@@ -84,64 +85,68 @@ const Chat = () => {
           )}
         </div>
       </div>
-      <div className="h-full w-full flex flex-col items-center justify-between pb-10 pt-[77px] absolute">
-        <div className="h-full w-full flex items-end pb-10">
-          <div className="w-full h-full overflow-auto px-5">
-            <div
-              ref={chatContainerRef}
-              className="w-full h-full overflow-auto px-3 lg:px-10"
-            >
-              {getChat?.map((item: ChatType) =>
-                item?.senderId === profile?.data?._id ? (
-                  <div
-                    key={item?._id}
-                    className="flex justify-end text-[17px]  w-fit ml-auto  rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none max-w-[45%]"
-                  >
-                    {item?.text && (
-                      <div className="my-3 flex flex-row-reverse gap-3 w-full">
-                        {/* <div className="text-[20px] text-white bg-gray-600 rounded-full py-2 px-2.5 uppercase w-[50px] flex items-center">
+      {messageLoading ? (
+        <Loading />
+      ) : (
+        <div className="h-full w-full flex flex-col items-center justify-between pb-10 pt-[77px] absolute">
+          <div className="h-full w-full flex items-end pb-10">
+            <div className="w-full h-full overflow-auto px-5">
+              <div
+                ref={chatContainerRef}
+                className="w-full h-full overflow-auto px-3 lg:px-10"
+              >
+                {getChat?.map((item: ChatType) =>
+                  item?.senderId === profile?.data?._id ? (
+                    <div
+                      key={item?._id}
+                      className="flex justify-end text-[17px]  w-fit ml-auto  rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none max-w-[45%]"
+                    >
+                      {item?.text && (
+                        <div className="my-3 flex flex-row-reverse gap-3 w-full">
+                          {/* <div className="text-[20px] text-white bg-gray-600 rounded-full py-2 px-2.5 uppercase w-[50px] flex items-center">
                         {firstNameInitial}
                         {lastNameInitial}
                       </div> */}
-                        <div className="w-fit max-w-[100%]">
-                          <div className="mb-[0.5] text-[10px] text-white text-right">
-                            {formateMessageTime(item?.createdAt)}
-                          </div>
-                          <div className="py-1 px-3  text-white bg-[#f54a0045] rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none overflow-hidden break-words">
-                            {item?.text}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div
-                    key={item?._id}
-                    className="flex justify-normal text-[17px]  mr-auto  rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none max-w-[45%]"
-                  >
-                    {item?.text && (
-                      <div className="my-3 flex flex-row gap-3 items-center w-full">
-                        <div className="text-[18px] lg:text-[20px] text-white bg-gray-600 rounded-full py-2 px-2.5 uppercase w-[45px] lg:w-[50px] flex items-center justify-center">
-                          {recieverFName}
-                          {recieverLName}
-                        </div>
-                        <div className="w-fit max-w-[100%]">
-                          <div className="mb-[0.5] text-[10px] text-white text-left">
-                            {formateMessageTime(item?.createdAt)}
-                          </div>
-                          <div className="py-1 px-3  text-white bg-black rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none overflow-hidden break-words min-w-[20px] max-w-full">
-                            {item?.text}
+                          <div className="w-fit max-w-[100%]">
+                            <div className="mb-[0.5] text-[10px] text-white text-right">
+                              {formateMessageTime(item?.createdAt)}
+                            </div>
+                            <div className="py-1 px-3  text-white bg-[#f54a0045] rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none overflow-hidden break-words">
+                              {item?.text}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                )
-              )}
+                      )}
+                    </div>
+                  ) : (
+                    <div
+                      key={item?._id}
+                      className="flex justify-normal text-[17px]  mr-auto  rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none max-w-[45%]"
+                    >
+                      {item?.text && (
+                        <div className="my-3 flex flex-row gap-3 items-center w-full">
+                          <div className="text-[18px] lg:text-[20px] text-white bg-gray-600 rounded-full py-2 px-2.5 uppercase w-[45px] lg:w-[50px] flex items-center justify-center">
+                            {recieverFName}
+                            {recieverLName}
+                          </div>
+                          <div className="w-fit max-w-[100%]">
+                            <div className="mb-[0.5] text-[10px] text-white text-left">
+                              {formateMessageTime(item?.createdAt)}
+                            </div>
+                            <div className="py-1 px-3  text-white bg-black rounded-l-xl rounded-b-xl rounded-t-xl rounded-br-none overflow-hidden break-words min-w-[20px] max-w-full">
+                              {item?.text}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
       <SendMessage />
     </div>
   );

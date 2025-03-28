@@ -38,7 +38,7 @@ const VerifyOtp = () => {
       const response = await dispatch(verifyOtp(value)).then(() =>
         dispatch(getProfile())
       );
-      console.log("response", response);
+      // console.log("response", response);
 
       action.resetForm();
       if (response?.payload?.success) {
