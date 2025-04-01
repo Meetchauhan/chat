@@ -20,8 +20,7 @@ const InstallAppButton: React.FC = () => {
       console.log("✅ `beforeinstallprompt` event fired!");
       event.preventDefault();
       setDeferredPrompt(event);
-      setIsInstallable(true);
-      alert("📲 Install this app by clicking 'Add to Home Screen' in your browser menu.");
+      setIsInstallable(true);   
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
