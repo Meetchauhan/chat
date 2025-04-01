@@ -5,7 +5,6 @@ import SendOtp from "../../components/sendOtp/SendOtp";
 import ToastError from "../../components/toastError/ToastError";
 import { useProfileLoading } from "../../customHooks/useProfile";
 import Loading from "../../components/loading/Loading";
-import InstallAppButton from "../../components/installAppButton/InstallAppButton";
 
 const Login = () => {
   const isOtpSent = useSelector(
@@ -52,8 +51,7 @@ const Login = () => {
           <SendOtp />
         )}
       </div>
-      <p>Test</p>
-      <InstallAppButton />
+    
     </>
   );
 };
