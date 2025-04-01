@@ -16,9 +16,14 @@ const InstallAppButton: React.FC = () => {
   const [isInstallable, setIsInstallable] = useState<boolean>(false);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
-  // Listen for the beforeinstallprompt event
+  // Check if the app is already installed
   useEffect(() => {
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstallable(false); // Don't show the install button if already installed
+    }
+
     const handleBeforeInstallPrompt = (event: BeforeInstallPromptEvent) => {
+      console.log('beforeinstallprompt event triggered');  // Debugging line
       event.preventDefault(); // Prevent the default prompt
       setDeferredPrompt(event); // Save the event so we can trigger it later
       setIsInstallable(true); // Show the install button
