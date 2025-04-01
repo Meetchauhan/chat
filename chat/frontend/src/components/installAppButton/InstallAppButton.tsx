@@ -21,6 +21,7 @@ const InstallAppButton: React.FC = () => {
       event.preventDefault();
       setDeferredPrompt(event);
       setIsInstallable(true);
+      alert("📲 Install this app by clicking 'Add to Home Screen' in your browser menu.");
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
@@ -38,7 +39,7 @@ const InstallAppButton: React.FC = () => {
       setDeferredPrompt(null);
       setIsInstallable(false);
     }
-  };
+  };    
 
   return isInstallable ? (
     <button onClick={handleInstallClick} className="install-button">
