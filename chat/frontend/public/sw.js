@@ -3,15 +3,16 @@ self.addEventListener("install", (event) => {
     event.waitUntil(
       caches.open("chat-app-cache").then((cache) => {
         return cache.addAll([
-          "/", // Cache home page
-          "/index.html", // Index page
-          "/assets/*", // Cache assets like JS, CSS, images (use wildcards if needed)
-          "/favicon.ico",
-          "/sw.js"
-          // Add any other files that need to be cached
+          "/",
+          "/index.html",
+          "/manifest.json",
+          "/manifest.webmanifest",
+          "/assets/fav.svg",
+          "/assets/chatHome.svg",
+          "/sw.js",
         ]);
       })
-    );  
+    );
   });
   
   self.addEventListener("activate", (event) => {
@@ -33,14 +34,12 @@ self.addEventListener("install", (event) => {
   self.addEventListener("fetch", (event) => {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
-        if (cachedResponse) {
-          return cachedResponse; // Return cached response
-        }
-        return fetch(event.request).catch(() => {
-          return caches.match("/index.html"); // Fallback to index.html for offline
-        });
+        return cachedResponse || fetch(event.request)
+          .then((response) => {
+            return response;
+          })
+          .catch(() => caches.match("/index.html"));
       })
     );
   });
-  
   
