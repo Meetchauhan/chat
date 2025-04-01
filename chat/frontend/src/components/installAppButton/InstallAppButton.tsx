@@ -1,14 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-// Extend WindowEventMap to support the `beforeinstallprompt` event
 declare global {
   interface WindowEventMap {
-    'beforeinstallprompt': BeforeInstallPromptEvent;
+    beforeinstallprompt: BeforeInstallPromptEvent;
   }
 
   interface BeforeInstallPromptEvent extends Event {
     prompt(): void;
-    userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+    userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
   }
 }
 
@@ -16,55 +15,36 @@ const InstallAppButton: React.FC = () => {
   const [isInstallable, setIsInstallable] = useState<boolean>(false);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
-  // Check if the app is already installed
   useEffect(() => {
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setIsInstallable(false); // Don't show the install button if already installed
-    }
-
     const handleBeforeInstallPrompt = (event: BeforeInstallPromptEvent) => {
-      console.log('beforeinstallprompt event triggered');  // Debugging line
-      event.preventDefault(); // Prevent the default prompt
-      setDeferredPrompt(event); // Save the event so we can trigger it later
-      setIsInstallable(true); // Show the install button
+      console.log("✅ `beforeinstallprompt` event fired!");
+      event.preventDefault();
+      setDeferredPrompt(event);
+      setIsInstallable(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
   }, []);
 
-  // Handle the install button click
   const handleInstallClick = async () => {
     if (deferredPrompt) {
-      deferredPrompt.prompt(); // Show the install prompt
-      const { outcome } = await deferredPrompt.userChoice; // Wait for user to make a choice
-      if (outcome === 'accepted') {
-        console.log('User accepted the install prompt');
-      } else {
-        console.log('User dismissed the install prompt');
-      }
-      setDeferredPrompt(null); // Reset the deferred prompt
-      setIsInstallable(false); // Hide the button
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User chose: ${outcome}`);
+      setDeferredPrompt(null);
+      setIsInstallable(false);
     }
   };
-  console.log("is installable", isInstallable);
-  
 
-  return (
-    <>
-      {isInstallable && (
-        <button
-          onClick={handleInstallClick}
-          className="install-button"
-        >
-          Install App
-        </button>
-      )}
-    </>
-  );
+  return isInstallable ? (
+    <button onClick={handleInstallClick} className="install-button">
+      Install App
+    </button>
+  ) : null;
 };
 
 export default InstallAppButton;
