@@ -34,32 +34,21 @@ const InstallAppButton: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const autoInstall = async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`User chose: ${outcome}`);
-        setDeferredPrompt(null);
-      }
-    };
-
-    if (deferredPrompt && isInstallable) {
-      autoInstall();
+  const handleInstallClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User chose: ${outcome}`);
+      setDeferredPrompt(null);
+      setIsInstallable(false);
     }
-  }, [deferredPrompt, isInstallable]);
+  };
 
-  //   const handleInstallClick = async () => {
-  //     if (deferredPrompt) {
-  //       deferredPrompt.prompt();
-  //       const { outcome } = await deferredPrompt.userChoice;
-  //       console.log(`User chose: ${outcome}`);
-  //       setDeferredPrompt(null);
-  //       setIsInstallable(false);
-  //     }
-  //   };
-
-  return null;
+  return isInstallable ? (
+    <button onClick={handleInstallClick} className="install-button">
+      Install App
+    </button>
+  ) : null;
 };
 
 export default InstallAppButton;
