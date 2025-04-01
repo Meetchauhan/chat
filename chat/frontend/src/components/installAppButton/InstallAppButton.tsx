@@ -48,7 +48,7 @@ const InstallAppButton: React.FC = () => {
       (window.navigator as Navigator).standalone
     ) {
       console.log("📲 Running in standalone mode");
-      setIsInstallable(false);
+      setIsInstallable(true);
     }
   }, []);
 
@@ -58,7 +58,7 @@ const InstallAppButton: React.FC = () => {
       const { outcome } = await deferredPrompt.userChoice;
       console.log(outcome === "accepted" ? "✅ Installed" : "❌ Dismissed");
       setDeferredPrompt(null);
-      setIsInstallable(false);
+      setIsInstallable(true);
     }
   };
 
