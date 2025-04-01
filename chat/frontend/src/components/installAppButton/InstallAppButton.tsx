@@ -19,7 +19,7 @@ const InstallAppButton: React.FC = () => {
   // Check if the app is already installed
   useEffect(() => {
     if (window.matchMedia('(display-mode: standalone)').matches) {
-      setIsInstallable(true); // Don't show the install button if already installed
+      setIsInstallable(false); // Don't show the install button if already installed
     }
 
     const handleBeforeInstallPrompt = (event: BeforeInstallPromptEvent) => {
