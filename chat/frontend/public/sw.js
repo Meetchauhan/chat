@@ -10,7 +10,7 @@ self.addEventListener("install", (event) => {
           // Add any other files that need to be cached
         ]);
       })
-    );
+    );  
   });
   
   self.addEventListener("activate", (event) => {
