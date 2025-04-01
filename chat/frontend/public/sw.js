@@ -7,8 +7,8 @@ self.addEventListener("install", (event) => {
           "/index.html",
           "/manifest.json",
           "/manifest.webmanifest",
-          "/assets/fav.svg",
-          "/assets/chatHome.svg",
+          "/fav.svg",
+          "/chatHome.svg",
           "/sw.js",
         ]);
       })
