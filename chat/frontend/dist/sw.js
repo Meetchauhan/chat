@@ -4,11 +4,10 @@ self.addEventListener("install", (event) => {
       caches.open("chat-app-cache").then((cache) => {
         return cache.addAll([
           "/", // Cache home page
-          "/index.html",
-          "/static/js/bundle.js",
-          "/static/css/main.css",
+          "/index.html", // Index page
+          "/assets/*", // Cache assets like JS, CSS, images (use wildcards if needed)
           "/favicon.ico",
-          // Add other static assets here
+          // Add any other files that need to be cached
         ]);
       })
     );
@@ -31,20 +30,24 @@ self.addEventListener("install", (event) => {
   });
   
   self.addEventListener("fetch", (event) => {
-    event.respondWith(
-      caches.match(event.request).then((cachedResponse) => {
-        if (cachedResponse) {
-          console.log("Returning cached response for:", event.request.url);
-          return cachedResponse; // Return cached response if available
-        }
+    const url = new URL(event.request.url);
   
-        // If no cached response, make network request
-        return fetch(event.request).catch((error) => {
-          console.error("Network request failed", error);
-          // Optional: Return a fallback response if network fails
-          return caches.match("/offline.html"); // Example: an offline page
-        });
-      })
-    );
+    // Check for static assets (to cache them) or API calls
+    if (url.pathname.startsWith("/static/") || url.pathname === "/") {
+      event.respondWith(
+        caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse; // Return cached response if available
+          }
+          return fetch(event.request).catch(() => {
+            // Optionally handle the case where fetch fails
+            return caches.match("/offline.html"); // Fallback page
+          });
+        })
+      );
+    } else {
+      event.respondWith(fetch(event.request)); // Direct fetch for dynamic content like API calls
+    }
   });
+  
   
