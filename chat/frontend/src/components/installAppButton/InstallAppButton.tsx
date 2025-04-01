@@ -50,6 +50,8 @@ const InstallAppButton: React.FC = () => {
       setIsInstallable(false); // Hide the button
     }
   };
+  console.log("is installable", isInstallable);
+  
 
   return (
     <>
