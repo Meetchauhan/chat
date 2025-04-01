@@ -13,23 +13,24 @@ declare global {
 
 const InstallAppButton: React.FC = () => {
   const [isInstallable, setIsInstallable] = useState<boolean>(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isIOS, setIsIOS] = useState<boolean>(false);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    setIsIOS(/iphone|ipad|ipod/.test(userAgent));
     const handleBeforeInstallPrompt = (event: BeforeInstallPromptEvent) => {
       console.log("✅ `beforeinstallprompt` event fired!");
       event.preventDefault();
       setDeferredPrompt(event);
-      setIsInstallable(true);   
+      setIsInstallable(true);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
     };
   }, []);
 
@@ -41,18 +42,7 @@ const InstallAppButton: React.FC = () => {
       setDeferredPrompt(null);
       setIsInstallable(false);
     }
-  };  
-
-  if (isIOS) {
-    return (
-      <p className="install-instructions">
-        📲 To install this app on iPhone:
-        <br />1 Open in **Safari**  
-        <br />2 Tap the **Share** button  
-        <br />3 Select **"Add to Home Screen"**  
-      </p>
-    );
-  }  
+  };
 
   return isInstallable ? (
     <button onClick={handleInstallClick} className="install-button">
