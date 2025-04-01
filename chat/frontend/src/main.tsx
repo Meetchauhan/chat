@@ -5,7 +5,7 @@ import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store/store.tsx";
-import 'react-loading-skeleton/dist/skeleton.css'
+import "react-loading-skeleton/dist/skeleton.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -16,3 +16,17 @@ createRoot(document.getElementById("root")!).render(
     </Provider>
   </StrictMode>
 );
+
+// ✅ Register Service Worker
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then((registration) => {
+        console.log("🚀 Service Worker registered:", registration);
+      })
+      .catch((error) => {
+        console.error("❌ Service Worker registration failed:", error);
+      });
+  });
+}

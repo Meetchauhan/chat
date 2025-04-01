@@ -1,7 +1,8 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Message, SendMessagePayload, UsersInitialState } from "../types/Types";
 import axios from "axios";
 import { Socket } from "socket.io-client";
+import { clearMessages, getMessagesFromDB, saveMessage } from "../db/db";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -15,19 +16,45 @@ export const getUsers = createAsyncThunk("getUsers", async () => {
 export const getMessages = createAsyncThunk(
   "getMessage",
   async (_id: string) => {
-    const response = await axios.get(
-      `${API_BASE_URL}/message/${_id}`,
-      {
-        withCredentials: true,
-      }
-    );
-    return response.data;
+    if (!navigator.onLine) {
+      console.log("📴 Offline: Fetching messages from IndexedDB");
+      const localMessages = await getMessagesFromDB();
+      return { message: localMessages };
+    }
+
+    const response = await axios.get(`${API_BASE_URL}/message/${_id}`, {
+      withCredentials: true,
+    });
+    const messages = response.data?.message || [];
+
+    await clearMessages();
+    for (const msg of messages) {
+      await saveMessage(msg);
+    }
+
+    return { message: messages };
   }
 );
 
+
 export const sendMessage = createAsyncThunk(
   "sendMessage",
-  async ({ selectedUserId, text }: SendMessagePayload) => {
+  async ({ selectedUserId, text, loggedinUserId }: SendMessagePayload) => {
+    const message: Message = {
+      _id: crypto.randomUUID(), // Generate temporary ID for offline messages
+      senderId: loggedinUserId!,
+      recieverId: selectedUserId,
+      text,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      __v: 0, // Default versioning
+      success: false, // Initially false
+    };
+    if (!navigator.onLine) {
+      console.log("📴 User is offline. Saving message locally.");
+      await saveMessage(message);
+      return message;
+    }
     const response = await axios.post(
       `${API_BASE_URL}/message/send/${selectedUserId}`,
       { text },
@@ -51,7 +78,7 @@ export const subscribeToMessages = (
   // Ensure we don't add multiple listeners
   socket.off("newMessage"); // Remove any existing listener before adding a new one
 
-  socket.on("newMessage", (newMessage: Message) => {
+  socket.on("newMessage", async (newMessage: Message) => {
     console.log("🔵 New message received:", newMessage);
 
     // Ensure the message is meant for the currently selected chat
@@ -65,18 +92,18 @@ export const subscribeToMessages = (
           newMessage.recieverId === selectedUserId)
       ) {
         dispatch(addMessage(newMessage)); // Only add messages that match the selected chat
+        await saveMessage(newMessage);    
       }
     }
   });
 };
 
 // ✅ Updated: Use socket from authSlice for unsubscription
-export const unSubscribeToMessage = (socket: SocketIOClient.Socket) => {
+export const unSubscribeToMessage = (socket: typeof Socket | null) => {
+  if (!socket) return;
   console.log("🛑 Unsubscribing from messages.");
   socket.off("newMessage");
-  // If you need to access the socket, get it from a stored reference
 };
-
 const initialState: UsersInitialState = {
   messages: [],
   users: null,
@@ -98,7 +125,7 @@ const chatSlice = createSlice({
       state.selectedUser = null;
       localStorage.setItem("selectedUser", JSON.stringify(null));
     },
-    addMessage: (state, action: PayloadAction<Message>) => {
+    addMessage: (state, action) => {
       if (state.messageLoading === false) {
         if (!Array.isArray(state.messages)) {
           state.messages = []; // ✅ Ensure `messages` is always an array

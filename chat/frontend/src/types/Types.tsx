@@ -147,6 +147,7 @@ export interface UsersListType {
 export interface SendMessagePayload {
   text: string;
   selectedUserId: string;
+  loggedinUserId: string | undefined;
 }
 
 export interface ChatType {
@@ -164,19 +165,15 @@ export interface SubscribeToMessageType {
 }
 
 export interface Message {
-  recieverId: string;
-  senderId: string;
-  success: boolean;
-  message: {
     _id: string;
     senderId: string;
-    receiverId: string;
+    recieverId: string;
     text: string;
     createdAt: string;
     updatedAt: string;
     __v: number;
-  };
-}
+    success: boolean; // Keep if required
+  }
 
 export interface UsersSliceInitialState {
   data: {
@@ -263,3 +260,4 @@ export interface RequestItemType {
   lastName: string;
   handleAcceptRequest: (senderId: string) => void;
 }
+
