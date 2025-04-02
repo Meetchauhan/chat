@@ -32,3 +32,13 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("/firebase-messaging-sw.js") // Must be inside `public` folder
+    .then((registration) => {
+      console.log("✅Push notification Service Worker registered:", registration);
+    })
+    .catch((error) => {
+      console.error("❌Push notification Service Worker registration failed:", error);
+    });
+}

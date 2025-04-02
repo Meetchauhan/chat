@@ -2,22 +2,29 @@ import { MessagePayload } from "firebase/messaging";
 import { messaging, getToken, onMessage } from "./firebase";
 import axios from "axios";
 
-const VAPID_KEY = import.meta.env.VITE_API_BASE_URL;
+const VAPID_KEY = import.meta.env.VITE_VAPID_KEY?.trim();
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!VAPID_KEY) {
+  console.error("❌ VAPID_KEY is missing! Check your .env file.");
+}
 
 export const requestNotificationPermission = async () => {
   const permission = await Notification.requestPermission();
   if (permission !== "granted") {
-    console.warn("Notification permission denied.");
+    console.warn("❌ Notification permission denied.");
     return;
   }
 
   try {
-    const token = await getToken(messaging, { vapidKey: VAPID_KEY });
-    console.log("FCM Token:", token);
-    return token; // Send this token to your backend
+    const token = await getToken(messaging, {
+      vapidKey: VAPID_KEY, // Pass the VAPID key
+    });
+
+    console.log("✅ FCM Token:", token);
+    return token;
   } catch (error) {
-    console.error("Error getting FCM token:", error);
+    console.error("❌ Error getting FCM token:", error);
   }
 };
 

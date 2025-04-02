@@ -9,7 +9,7 @@ const firebaseConfig = {
   messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_APP_ID,
 };
-const VAPID_KEY = import.meta.env.VITE_VAPID_KEY;
+// const VAPID_KEY = import.meta.env.VITE_VAPID_KEY;
 // ✅ Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
@@ -27,23 +27,23 @@ if ("serviceWorker" in navigator) {
 }
 
 // ✅ Function to Request Notification Permission
-export const requestNotificationPermission = async () => {
-  const permission = await Notification.requestPermission();
-  if (permission !== "granted") {
-    console.warn("❌ Notification permission denied.");
-    return;
-  }
+// export const requestNotificationPermission = async () => {
+//   const permission = await Notification.requestPermission();
+//   if (permission !== "granted") {
+//     console.warn("❌ Notification permission denied.");
+//     return;
+//   }
 
-  try {
-    const token = await getToken(messaging, {
-      vapidKey: VAPID_KEY.trim(), // Ensure no spaces
-    });
+//   try {
+//     const token = await getToken(messaging, {
+//       vapidKey: VAPID_KEY.trim(), // Ensure no spaces
+//     });
 
-    console.log("✅ FCM Token:", token);
-    return token;
-  } catch (error) {
-    console.error("❌ Error getting FCM token:", error);
-  }
-};
+//     console.log("✅ FCM Token:", token);
+//     return token;
+//   } catch (error) {
+//     console.error("❌ Error getting FCM token:", error);
+//   }
+// };
 
 export { messaging, getToken, onMessage };
