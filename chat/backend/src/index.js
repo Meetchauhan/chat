@@ -8,6 +8,7 @@ import { connectDB } from "./config/db.config.js";
 import registerRoute from "./routes/user.routes.js";
 import messageRoute from "./routes/message.routes.js";
 import connecUsersRoute from "./routes/connectingUsers.routes.js";
+import pushNotificationRouter from "./routes/pushNotification.routes.js";
 import { app, server } from "./util/socket.js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -41,11 +42,11 @@ app.use(cookieParser());
 app.use("/api/user", registerRoute);
 app.use("/api/message", messageRoute);
 app.use("/api", connecUsersRoute);
+app.use("/api", pushNotificationRouter);
 
 // app.get("/", (req, res) => {
 //   res.send("Server is started");
 // });
-
 
 app.use(express.static(path.join(__dirname, "../../frontend/dist"))); // Adjust path if needed
 
