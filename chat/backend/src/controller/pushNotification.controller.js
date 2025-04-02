@@ -1,4 +1,4 @@
-import messaging from "../firebase/firebaseAdmin";
+import messaging from "../firebase/firebaseAdmin.js";
 
 export const pushNotification = async (req, res) => {
   const { token, title, body } = req.body;
