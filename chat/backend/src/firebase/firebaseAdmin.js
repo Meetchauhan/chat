@@ -1,5 +1,5 @@
 import admin from "firebase-admin";
-import serviceAccount from "./chat-app-845b3-cb897b792016.json";
+import serviceAccount from "../secrets/serviceAccount.json";
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
