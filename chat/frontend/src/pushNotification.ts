@@ -51,9 +51,11 @@ export const sendPushNotification = async (
 ) => {
   try {
     await axios.post(`${API_BASE_URL}/send-notification`, {
-      token,
-      title,
-      body,
+      body: {
+        token,
+        title,
+        body,
+      },
     });
     console.log("Notification sent!");
   } catch (error) {
