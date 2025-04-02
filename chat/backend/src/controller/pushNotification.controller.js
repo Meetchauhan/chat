@@ -1,3 +1,5 @@
+import messaging from "../firebase/firebaseAdmin";
+
 export const pushNotification = async (req, res) => {
   const { token, title, body } = req.body;
 
@@ -23,7 +25,7 @@ export const pushNotification = async (req, res) => {
 
   try {
     await messaging.send(message);
-    res.status(200).json({ success: true, message: "Notification sent!" });
+    res.status(200).json({ success: true, message: "Notification sent!", message:message });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
