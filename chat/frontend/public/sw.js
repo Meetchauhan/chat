@@ -4,13 +4,22 @@ importScripts("https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-comp
 console.log("📦 Service Worker loaded...");
 
 // ✅ Firebase Configuration (Use the same as your frontend)
+const API_KEY = import.meta.env.VITE_FIREBASE_API_KEY;
+const ADMIN_DOMAIN = import.meta.env.VITE_ADMIN_DOMAIN;
+const PROJECT_ID = import.meta.env.VITE_PROJECT_ID;
+const STORAGE_BICKET = import.meta.env.VITE_STORAGE_BICKET;
+const MESSAGING_SENDER_ID = import.meta.env.VITE_MESSAGING_SENDER_ID;
+const APP_ID = import.meta.env.VITE_APP_ID;
+const MEASUREMENT_ID = import.meta.env.VITE_MEASUREMENT_ID;
+
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: API_KEY,
+  authDomain: ADMIN_DOMAIN,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BICKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID,
+  measurementId: MEASUREMENT_ID,
 };
 
 // ✅ Initialize Firebase
