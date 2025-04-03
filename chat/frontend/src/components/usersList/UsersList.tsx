@@ -24,7 +24,7 @@ const UsersList = () => {
         {userLoading ? (
           <SkeletonTheme baseColor="#39424e" highlightColor="#f54a00">
             <div className="my-2">
-              <Skeleton height={60} duration={0.9} />
+              <Skeleton  height={60} duration={0.9} />
             </div>
             <div className="my-2">
               <Skeleton height={60} duration={0.9} />

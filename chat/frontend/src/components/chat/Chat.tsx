@@ -14,6 +14,7 @@ import useOnlineUser from "../../customHooks/useOnlineUser";
 import SendMessage from "../sendMessage/SendMessage";
 import { ChatType } from "../../types/Types";
 import { formateMessageTime } from "../../utils/Utils";
+import { sendPushNotification } from "../../pushNotification";
 
 const Chat = () => {
   const selectedUser = useSelectedUser();
@@ -30,6 +31,9 @@ const Chat = () => {
 
   // ✅ Track if messages have already been fetched
   const [messagesFetched, setMessagesFetched] = useState(false);
+  const getToken = useSelector(
+    (item: RootState) => item?.sendNotification?.token
+  );
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -52,6 +56,18 @@ const Chat = () => {
         // ✅ 3. If online, sync with the server
         if (navigator.onLine) {
           await dispatch(getMessages(selectedUser._id));
+          const handleSendNotification = async () => {
+            if (!getToken) {
+              alert("Get notification permission first!");
+              return;
+            }
+            sendPushNotification(
+              getToken,
+              "New Chat Message",
+              "You have a new message!"
+            );
+          };
+          await handleSendNotification();
         }
       } catch (error) {
         console.error("Error fetching messages:", error);

@@ -10,6 +10,7 @@ import {
   requestNotificationPermission,
   sendPushNotification,
 } from "../../pushNotification";
+import { getToken } from "../../features/SendNotificationSlice";
 
 const Home = () => {
   const [fcmToken, setFcmToken] = useState("");
@@ -36,10 +37,11 @@ const Home = () => {
 
       if (token) {
         setFcmToken(token);
+        dispatch(getToken(token));
       }
     };
     handleRequestPermission();
-  }, []);
+  }, [dispatch]);
 
   const handleSendNotification = () => {
     if (!fcmToken) {
