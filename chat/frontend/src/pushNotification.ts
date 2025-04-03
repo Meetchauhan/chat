@@ -30,18 +30,21 @@ export const requestNotificationPermission = async () => {
 
 // Listen for incoming messages
 onMessage(messaging, (payload: MessagePayload) => {
-  console.log("Foreground message received:", payload);
-
+  console.log("🔥 Foreground message received!", payload);
+  
   if (payload.notification) {
     const title = payload.notification.title ?? "New Notification";
     const body = payload.notification.body ?? "You have a new message!";
     const icon = payload.notification.icon ?? "/default-icon.png";
-    new Notification(title, {
-      body,
-      icon,
-    });
+
+    console.log("🔔 Showing notification:", { title, body, icon });
+
+    new Notification(title, { body, icon });
+  } else {
+    console.warn("⚠️ No notification payload found in message.");
   }
 });
+
 console.log("Notification permission", Notification.permission);
 
 // Send push notification from frontend
