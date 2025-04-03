@@ -4,16 +4,16 @@ import NoChatSelected from "../../components/chat/NoChatSelected";
 import useSelectedUser from "../../customHooks/useSelectedUser";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { setOnlineUsers } from "../../features/AuthSlice";
 import {
   requestNotificationPermission,
-  sendPushNotification,
+  // sendPushNotification,
 } from "../../pushNotification";
 import { getToken } from "../../features/SendNotificationSlice";
 
 const Home = () => {
-  const [fcmToken, setFcmToken] = useState("");
+  // const [fcmToken, setFcmToken] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const selectedUser = useSelectedUser();
   const socket = useSelector((item: RootState) => item?.auth?.socket);
@@ -36,24 +36,24 @@ const Home = () => {
       console.log("token", token);
 
       if (token) {
-        setFcmToken(token);
+        // setFcmToken(token);
         dispatch(getToken(token));
       }
     };
     handleRequestPermission();
   }, [dispatch]);
 
-  const handleSendNotification = () => {
-    if (!fcmToken) {
-      alert("Get notification permission first!");
-      return;
-    }
-    sendPushNotification(
-      fcmToken,
-      "New Chat Message",
-      "You have a new message!"
-    );
-  };
+  // const handleSendNotification = () => {
+  //   if (!fcmToken) {
+  //     alert("Get notification permission first!");
+  //     return;
+  //   }
+  //   sendPushNotification(
+  //     fcmToken,
+  //     "New Chat Message",
+  //     "You have a new message!"
+  //   );
+  // };
 
   return (
     <>
