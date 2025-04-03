@@ -57,18 +57,12 @@ const firebaseConfig = {
 
 const messaging = firebase.messaging();
 
-self.addEventListener("push", (event) => {
-  console.log("🔥 Background push event received!", event);
+// ✅ Handle Background Notifications
+messaging.onBackgroundMessage((payload) => {
+  console.log("📩 Background notification received:", payload);
 
-  if (event.data) {
-    const payload = event.data.json();
-    console.log("📩 Background notification payload:", payload);
-
-    self.registration.showNotification(payload.notification.title, {
-      body: payload.notification.body,
-      icon: payload.notification.icon || "/fav.svg",
-    });
-  } else {
-    console.warn("⚠️ No data found in push event.");
-  }
+  self.registration.showNotification(payload.notification.title, {
+    body: payload.notification.body,
+    icon: payload.notification.icon || "/fav.svg",
+  });
 });
