@@ -35,7 +35,7 @@ onMessage(messaging, (payload: MessagePayload) => {
   if (payload.notification) {
     const title = payload.notification.title ?? "New Notification";
     const body = payload.notification.body ?? "You have a new message!";
-    const icon = payload.notification.icon ?? "/default-icon.png";
+    const icon = payload.notification.icon ?? "/fav.svg";
 
     console.log("🔔 Showing notification:", { title, body, icon });
 
