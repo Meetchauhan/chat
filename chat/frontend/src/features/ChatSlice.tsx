@@ -105,7 +105,7 @@ export const subscribeToMessages = (
           }
           sendPushNotification(
             getToken,
-            "New Chat Message",
+            newMessage?.text,
             "You have a new message!"
           );
         };
