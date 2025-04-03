@@ -42,6 +42,7 @@ onMessage(messaging, (payload: MessagePayload) => {
     });
   }
 });
+console.log("Notification permission", Notification.permission);
 
 // Send push notification from frontend
 export const sendPushNotification = async (
