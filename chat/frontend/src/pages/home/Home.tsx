@@ -29,14 +29,17 @@ const Home = () => {
     }
   }, [dispatch, socket]);
 
-  const handleRequestPermission = async () => {
-    const token = await requestNotificationPermission();
-    console.log("token", token);
-    
-    if (token) {
-      setFcmToken(token);
-    }
-  };
+  useEffect(() => {
+    const handleRequestPermission = async () => {
+      const token = await requestNotificationPermission();
+      console.log("token", token);
+
+      if (token) {
+        setFcmToken(token);
+      }
+    };
+    handleRequestPermission();
+  }, []);
 
   const handleSendNotification = () => {
     if (!fcmToken) {
@@ -65,12 +68,12 @@ const Home = () => {
       </div>
       <div style={{ padding: "20px", textAlign: "center" }}>
         <h2>PWA Chat App 🚀</h2>
-        <button
+        {/* <button
           onClick={handleRequestPermission}
           style={{ margin: "10px", padding: "10px" }}
-        >
+        > 
           Enable Push Notifications
-        </button>
+        </button> */}
         <button onClick={handleSendNotification} style={{ padding: "10px" }}>
           Send Test Notification
         </button>

@@ -15,7 +15,6 @@ import { clearMessages, getMessagesFromDB } from "./db/db";
 import { sendMessage } from "./features/ChatSlice";
 import { SendMessagePayload } from "./types/Types";
 import store from "./store/store";
-import InstallAppButton from "./components/installAppButton/InstallAppButton";
 // import { getMessages, subscribeToMessage, unSubscribeToMessage } from "./features/ChatSlice";
 // import useSelectedUser from "./customHooks/useSelectedUser";
 
@@ -73,7 +72,7 @@ const App: React.FC = () => {
 
   return (
     <Layout>
-        <InstallAppButton />
+        
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route

@@ -31,7 +31,7 @@ export const requestNotificationPermission = async () => {
 // Listen for incoming messages
 onMessage(messaging, (payload: MessagePayload) => {
   console.log("🔥 Foreground message received!", payload);
-  
+
   if (payload.notification) {
     const title = payload.notification.title ?? "New Notification";
     const body = payload.notification.body ?? "You have a new message!";

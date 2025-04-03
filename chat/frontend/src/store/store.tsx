@@ -8,6 +8,7 @@ import UsersSlice from "../features/UsersSlice";
 import SendRequestSlice from "../features/SendRequestSlice";
 import AcceptRequestSlice from "../features/AcceptRequestSlice";
 import mobileMenuSlice from "../features/mobileMenuSlice";
+import InstallAppSlice from "../features/InstallAppSlice";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     sendRequest: SendRequestSlice,
     acceptRequest: AcceptRequestSlice,
     menu: mobileMenuSlice,
+    installAppModal: InstallAppSlice,
   },
 });
 

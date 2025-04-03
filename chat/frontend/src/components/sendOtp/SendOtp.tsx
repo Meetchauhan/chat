@@ -27,6 +27,8 @@ const SendOtp = () => {
     onSubmit: async (value, action) => {
       console.log("login value", value);
       const response = await dispatch(sendOtp(value));
+      console.log("response", response);
+      
       localStorage.setItem("loginMain", JSON.stringify(value));
       if (response?.payload?.success) {
         action.resetForm();
