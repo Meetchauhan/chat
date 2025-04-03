@@ -103,11 +103,8 @@ export const subscribeToMessages = (
             alert("Get notification permission first!");
             return;
           }
-          sendPushNotification(
-            getToken,
-            newMessage?.text,
-            "You have a new message!"
-          );
+          console.log("new message", newMessage?.text);
+          sendPushNotification(getToken, newMessage?.text, newMessage?.text);
         };
         await handleSendNotification();
       }
