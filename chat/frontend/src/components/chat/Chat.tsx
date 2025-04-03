@@ -14,7 +14,6 @@ import useOnlineUser from "../../customHooks/useOnlineUser";
 import SendMessage from "../sendMessage/SendMessage";
 import { ChatType } from "../../types/Types";
 import { formateMessageTime } from "../../utils/Utils";
-import { sendPushNotification } from "../../pushNotification";
 
 const Chat = () => {
   const selectedUser = useSelectedUser();
