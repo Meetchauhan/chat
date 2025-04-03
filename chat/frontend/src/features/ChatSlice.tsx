@@ -106,8 +106,8 @@ export const subscribeToMessages = (
           console.log("new message", newMessage?.text);
           sendPushNotification(
             getToken,
-            newMessage?.text,
-            newMessage?.senderId
+            newMessage?.senderId,
+            newMessage?.text
           );
         };
         await handleSendNotification();
