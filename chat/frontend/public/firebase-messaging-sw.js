@@ -22,7 +22,7 @@ messaging.onBackgroundMessage((payload) => {
 
   self.registration.showNotification(payload.notification.title, {
     body: payload.notification.body,
-    icon: payload.notification.icon || "/default-icon.png",
+    icon: payload.notification.icon || "/fav.svg",
   });
 });
 
