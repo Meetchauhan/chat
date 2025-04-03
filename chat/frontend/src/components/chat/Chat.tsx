@@ -34,6 +34,7 @@ const Chat = () => {
   const getToken = useSelector(
     (item: RootState) => item?.sendNotification?.token
   );
+console.log("get token", getToken);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -56,18 +57,18 @@ const Chat = () => {
         // ✅ 3. If online, sync with the server
         if (navigator.onLine) {
           await dispatch(getMessages(selectedUser._id));
-          const handleSendNotification = async () => {
-            if (!getToken) {
-              alert("Get notification permission first!");
-              return;
-            }
-            sendPushNotification(
-              getToken,
-              "New Chat Message",
-              "You have a new message!"
-            );
-          };
-          await handleSendNotification();
+          // const handleSendNotification = async () => {
+          //   if (!getToken) {
+          //     alert("Get notification permission first!");
+          //     return;
+          //   }
+          //   sendPushNotification(
+          //     getToken,
+          //     "New Chat Message",
+          //     "You have a new message!"
+          //   );
+          // };
+          // await handleSendNotification();
         }
       } catch (error) {
         console.error("Error fetching messages:", error);

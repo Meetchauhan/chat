@@ -3,6 +3,10 @@ import { Message, SendMessagePayload, UsersInitialState } from "../types/Types";
 import axios from "axios";
 import { Socket } from "socket.io-client";
 import { clearMessages, getMessagesFromDB, saveMessage } from "../db/db";
+import {
+  requestNotificationPermission,
+  sendPushNotification,
+} from "../pushNotification";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -35,7 +39,6 @@ export const getMessages = createAsyncThunk(
     return { message: messages };
   }
 );
-
 
 export const sendMessage = createAsyncThunk(
   "sendMessage",
@@ -83,6 +86,8 @@ export const subscribeToMessages = (
 
     // Ensure the message is meant for the currently selected chat
     console.log("messageLoading", messageLoading);
+    const getToken = await requestNotificationPermission();
+    console.log("get token slice", getToken);
 
     if (!messageLoading) {
       if (
@@ -92,7 +97,19 @@ export const subscribeToMessages = (
           newMessage.recieverId === selectedUserId)
       ) {
         dispatch(addMessage(newMessage)); // Only add messages that match the selected chat
-        await saveMessage(newMessage);    
+        await saveMessage(newMessage);
+        const handleSendNotification = async () => {
+          if (!getToken) {
+            alert("Get notification permission first!");
+            return;
+          }
+          sendPushNotification(
+            getToken,
+            "New Chat Message",
+            "You have a new message!"
+          );
+        };
+        await handleSendNotification();
       }
     }
   });
