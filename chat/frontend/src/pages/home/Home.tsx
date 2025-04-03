@@ -68,19 +68,19 @@ const Home = () => {
           {selectedUser ? <Chat /> : <Sidebar />}
         </div>
       </div>
-      <div style={{ padding: "20px", textAlign: "center" }}>
+      {/* <div style={{ padding: "20px", textAlign: "center" }}>
         <h2>PWA Chat App 🚀</h2>
-        {/* <button
+        <button
           onClick={handleRequestPermission}
           style={{ margin: "10px", padding: "10px" }}
         > 
           Enable Push Notifications
-        </button> */}
+        </button>
         <button onClick={handleSendNotification} style={{ padding: "10px" }}>
           Send Test Notification
         </button>
         {fcmToken && <p>FCM Token: {fcmToken}</p>}
-      </div>
+      </div> */}
     </>
   );
 };
