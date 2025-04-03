@@ -19,6 +19,8 @@ export const pushNotification = async (req, res) => {
       notification: {
         // icon: "your-icon-url.png",
         click_action: "https://chat-i7if.onrender.com",
+        body:body,
+        title: title
       },
     },
   };
