@@ -33,6 +33,7 @@ const Chat = () => {
   const getToken = useSelector(
     (item: RootState) => item?.sendNotification?.token
   );
+  const senderFirstName = profile?.data?.firstName || undefined
 console.log("get token", getToken);
 
   useEffect(() => {
@@ -56,18 +57,7 @@ console.log("get token", getToken);
         // ✅ 3. If online, sync with the server
         if (navigator.onLine) {
           await dispatch(getMessages(selectedUser._id));
-          // const handleSendNotification = async () => {
-          //   if (!getToken) {
-          //     alert("Get notification permission first!");
-          //     return;
-          //   }
-          //   sendPushNotification(
-          //     getToken,
-          //     "New Chat Message",
-          //     "You have a new message!"
-          //   );
-          // };
-          // await handleSendNotification();
+          
         }
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -96,7 +86,8 @@ console.log("get token", getToken);
         socket,
         selectedUser._id,
         profile?.data?._id,
-        messageLoading
+        messageLoading,
+        senderFirstName
       );
     }
 
@@ -105,7 +96,7 @@ console.log("get token", getToken);
         unSubscribeToMessage(socket);
       }
     };
-  }, [selectedUser, socket, dispatch, profile?.data?._id, messageLoading]);
+  }, [selectedUser, socket, dispatch, profile?.data?._id, messageLoading, senderFirstName]);
 
   // ✅ Scroll to the latest message
   useEffect(() => {

@@ -42,7 +42,7 @@ export const getMessages = createAsyncThunk(
 
 export const sendMessage = createAsyncThunk(
   "sendMessage",
-  async ({ selectedUserId, text, loggedinUserId }: SendMessagePayload) => {
+  async ({ selectedUserId, text, loggedinUserId, senderFirstName }: SendMessagePayload) => {
     const message: Message = {
       _id: crypto.randomUUID(), // Generate temporary ID for offline messages
       senderId: loggedinUserId!,
@@ -52,6 +52,7 @@ export const sendMessage = createAsyncThunk(
       updatedAt: new Date().toISOString(),
       __v: 0, // Default versioning
       success: false, // Initially false
+      senderFirstName: senderFirstName,
     };
     if (!navigator.onLine) {
       console.log("📴 User is offline. Saving message locally.");
@@ -74,7 +75,8 @@ export const subscribeToMessages = (
   socket: typeof Socket | null,
   selectedUserId: string,
   currentUserId: string | undefined,
-  messageLoading: boolean
+  messageLoading: boolean,
+  senderFirstName: string | undefined
 ) => {
   if (!socket) return;
 
@@ -104,11 +106,7 @@ export const subscribeToMessages = (
             return;
           }
           console.log("new message", newMessage?.text);
-          sendPushNotification(
-            getToken,
-            newMessage?.senderId,
-            newMessage?.text
-          );
+          sendPushNotification(getToken, senderFirstName, newMessage?.text);
         };
         await handleSendNotification();
       }

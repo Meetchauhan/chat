@@ -48,6 +48,7 @@ const App: React.FC = () => {
           selectedUserId: msg.recieverId,
           loggedinUserId: msg.senderId!,
           text: msg.text,
+          senderFirstName: msg.senderFirstName
         };
 
         return store.dispatch(sendMessage(payload)).unwrap();

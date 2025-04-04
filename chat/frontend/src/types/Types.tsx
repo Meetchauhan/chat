@@ -155,6 +155,7 @@ export interface SendMessagePayload {
   text: string;
   selectedUserId: string;
   loggedinUserId: string | undefined;
+  senderFirstName: string | undefined;
 }
 
 export interface ChatType {
@@ -180,6 +181,7 @@ export interface Message {
   updatedAt: string;
   __v: number;
   success: boolean; // Keep if required
+  senderFirstName: string | undefined;
 }
 
 export interface UsersSliceInitialState {

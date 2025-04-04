@@ -50,7 +50,7 @@ console.log("Notification permission", Notification.permission);
 // Send push notification from frontend
 export const sendPushNotification = async (
   token: string,
-  title: string,
+  title: string | undefined,
   body: string
 ) => {
   try {
