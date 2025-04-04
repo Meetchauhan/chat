@@ -21,20 +21,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const messaging = getMessaging(app);
-if (!isIOS() && (await isSupported())) {
-  // ✅ Register Service Worker Correctly
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("/firebase-messaging-sw.js") // Must be inside the `public` folder
-      .then((registration) => {
-        console.log("✅ Service Worker registered:", registration);
-      })
-      .catch((error) => {
-        console.error("❌ Service Worker registration failed:", error);
-      });
+export const setupFirebaseMessaging = async () => {
+  if (!isIOS() && (await isSupported())) {
+    // ✅ Register Service Worker Correctly
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/firebase-messaging-sw.js") // Must be inside the `public` folder
+        .then((registration) => {
+          console.log("✅ Service Worker registered:", registration);
+        })
+        .catch((error) => {
+          console.error("❌ Service Worker registration failed:", error);
+        });
+    }
+  } else {
+    console.log("Push notifications skipped on iOS or unsupported browser.");
   }
-} else {
-  console.log("Push notifications skipped on iOS or unsupported browser.");
-}
+};
 
 export { messaging, getToken, onMessage };

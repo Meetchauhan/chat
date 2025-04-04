@@ -15,6 +15,7 @@ import { clearMessages, getMessagesFromDB } from "./db/db";
 import { sendMessage } from "./features/ChatSlice";
 import { SendMessagePayload } from "./types/Types";
 import store from "./store/store";
+import { setupFirebaseMessaging } from "./firebase";
 // import { getMessages, subscribeToMessage, unSubscribeToMessage } from "./features/ChatSlice";
 // import useSelectedUser from "./customHooks/useSelectedUser";
 
@@ -25,40 +26,42 @@ const App: React.FC = () => {
     dispatch(getProfile());
   }, [dispatch]);
 
+  useEffect(() => {
+    setupFirebaseMessaging();
+  }, []);
+
   const syncMessages = useCallback(async () => {
     console.log("🌍 User is online. Syncing messages...");
-  
+
     try {
       const unsentMessages = await getMessagesFromDB();
-      
+
       if (unsentMessages.length === 0) {
         console.log("⚠️ No unsent messages to sync.");
         return;
       }
-  
+
       console.log("📩 Found unsent messages:", unsentMessages);
-  
+
       const sendPromises = unsentMessages.map(async (msg) => {
         const payload: SendMessagePayload = {
           selectedUserId: msg.recieverId,
           loggedinUserId: msg.senderId!,
           text: msg.text,
         };
-  
+
         return store.dispatch(sendMessage(payload)).unwrap();
       });
-  
+
       await Promise.all(sendPromises); // ✅ Send all messages concurrently
       console.log("🌍 User is online. Syncing complated...");
       await clearMessages(); // ✅ Remove synced messages from IndexedDB
-  
+
       console.log("✅ All offline messages sent and cleared from IndexedDB.");
     } catch (error) {
       console.error("❌ Error syncing messages:", error);
     }
   }, []);
-  
-  
 
   useEffect(() => {
     window.addEventListener("online", syncMessages);
@@ -68,11 +71,9 @@ const App: React.FC = () => {
       window.removeEventListener("online", syncMessages);
     };
   }, [syncMessages]);
-  
 
   return (
     <Layout>
-        
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route
