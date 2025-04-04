@@ -30,6 +30,7 @@ const SendMessage = () => {
         updatedAt: new Date().toISOString(),
         __v: 0,
         success: false,
+        senderFirstName: profile?.data?.firstName
       };
 
       if (!navigator.onLine) {
@@ -46,6 +47,7 @@ const SendMessage = () => {
           selectedUserId: selectedUser?._id,
           text: messagePayload.text,
           loggedinUserId: profile?.data?._id,
+          senderFirstName: profile?.data?.firstName
         })
       );
 
