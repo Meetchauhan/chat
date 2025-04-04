@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
 import Input from "../../components/formComponents/Input";
 import Button from "../../components/formComponents/Button";
-import { resetSendOtpState, sendOtp } from "../../features/AuthSlice";
+import {
+  getLoginEmail,
+  resetSendOtpState,
+  sendOtp,
+} from "../../features/AuthSlice";
 import { SendOtpSchema } from "../../validationSchema/SendOtpSchema";
 import { closeToast, showToast } from "../../features/ToastSlice";
 import { useEffect } from "react";
@@ -14,7 +18,7 @@ const SendOtp = () => {
   const isOtpSent = useSelector(
     (item: RootState) => item?.auth?.sendOtpState?.success
   );
-  const loading = useSelector((item: RootState) => item?.auth?.loading);
+  const loading = useSelector((item: RootState) => item?.auth?.sendOtpLoading);
   const isToast = useSelector((item: RootState) => item?.toast?.value);
 
   const initialValue = {
@@ -28,14 +32,15 @@ const SendOtp = () => {
       console.log("login value", value);
       const response = await dispatch(sendOtp(value));
       console.log("response", response);
-      
+      dispatch(getLoginEmail(response));
+
       localStorage.setItem("loginMain", JSON.stringify(value));
       if (response?.payload?.success) {
         action.resetForm();
       }
     },
   });
- 
+
   useEffect(() => {
     if (isOtpSent === false) {
       dispatch(showToast());

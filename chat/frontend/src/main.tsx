@@ -32,7 +32,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-if ("serviceWorker" in navigator) {
+if ("serviceWorker" in navigator && 'PushManager' in window) {
   navigator.serviceWorker
     .register("/firebase-messaging-sw.js") // Must be inside `public` folder
     .then((registration) => {

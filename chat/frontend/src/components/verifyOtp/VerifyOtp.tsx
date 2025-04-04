@@ -20,8 +20,16 @@ const VerifyOtp = () => {
   const isOtpVerify = useSelector(
     (item: RootState) => item?.auth?.verifyOtpState?.success
   );
+  const resendOtpLoading = useSelector(
+    (item: RootState) => item?.auth?.sendOtpLoading
+  );
   const loading = useSelector((item: RootState) => item?.auth?.loading);
   const isToast = useSelector((item: RootState) => item?.toast?.value);
+  const loginEmail = useSelector(
+    (item: RootState) => item?.auth?.loginEmail?.meta?.arg
+  );
+  console.log("loginEmail", loginEmail);
+
   const navigate = useNavigate();
 
   const resendMail = localStorage.getItem("loginMain");
@@ -63,8 +71,10 @@ const VerifyOtp = () => {
   const handleResendOtp = () => {
     if (resendMail) {
       dispatch(sendOtp(JSON.parse(resendMail)));
+    } else if (loginEmail) {
+      dispatch(sendOtp(loginEmail));
     } else {
-      console.error("No email found in localStorage");
+      console.warn("No email found to resend OTP.");
     }
   };
   console.log("otp value", values);
@@ -96,10 +106,15 @@ const VerifyOtp = () => {
         <div className="mt-2 text-amber-50 text-center">
           Didn't get OTP?{" "}
           <button
-            className="text-orange-600 underline cursor-pointer"
+            className={`underline ${
+              resendOtpLoading
+                ? "text-gray-400 cursor-not-allowed"
+                : "text-orange-600 cursor-pointer"
+            }`}
             onClick={handleResendOtp}
+            disabled={resendOtpLoading}
           >
-            Resend
+            {resendOtpLoading ? "Sending OTP" : "Resend"}
           </button>
         </div>
       </div>

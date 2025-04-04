@@ -51,9 +51,11 @@ const initialState: SendOtpState = {
   loading: false,
   sendOtpState: null,
   verifyOtpState: null,
+  sendOtpLoading: false,
   error: null,
   socket: null,
   onlineUsers: [],
+  loginEmail: null,
 };
 
 const RegistrationSlice = createSlice({
@@ -85,19 +87,22 @@ const RegistrationSlice = createSlice({
     setOnlineUsers: (state, action) => {
       state.onlineUsers = action.payload;
     },
+    getLoginEmail: (state, action) => {
+      state.loginEmail = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(sendOtp.pending, (state) => {
-        state.loading = true;
+        state.sendOtpLoading = true;
       })
       .addCase(sendOtp.fulfilled, (state, action) => {
-        state.loading = false;
+        state.sendOtpLoading = false;
         state.sendOtpState = action.payload;
         // localStorage.setItem("loginMain", JSON.stringify(action.payload));
       })
       .addCase(sendOtp.rejected, (state, action) => {
-        state.loading = false;
+        state.sendOtpLoading = false;
         state.error = action.error.message;
       })
       .addCase(verifyOtp.pending, (state) => {
@@ -131,5 +136,6 @@ export const {
   connectSocker,
   disconnectSocker,
   setOnlineUsers,
+  getLoginEmail,
 } = RegistrationSlice.actions;
 export default RegistrationSlice.reducer;

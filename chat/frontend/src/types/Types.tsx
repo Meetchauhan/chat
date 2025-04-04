@@ -58,6 +58,14 @@ export interface SendOtpPayload {
 
 export interface SendOtpState {
   loading: boolean;
+  sendOtpLoading: boolean;
+  loginEmail: {
+    meta: {
+      arg: {
+        email: string | null;
+      };
+    };
+  } | null;
   sendOtpState: {
     success?: boolean;
     message?: string;
@@ -66,7 +74,6 @@ export interface SendOtpState {
     success?: boolean;
     message?: string;
   } | null;
-
   error: null | string | undefined;
   socket: typeof Socket | null;
   onlineUsers: string[] | null;
@@ -165,15 +172,15 @@ export interface SubscribeToMessageType {
 }
 
 export interface Message {
-    _id: string;
-    senderId: string;
-    recieverId: string;
-    text: string;
-    createdAt: string;
-    updatedAt: string;
-    __v: number;
-    success: boolean; // Keep if required
-  }
+  _id: string;
+  senderId: string;
+  recieverId: string;
+  text: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  success: boolean; // Keep if required
+}
 
 export interface UsersSliceInitialState {
   data: {
@@ -260,4 +267,3 @@ export interface RequestItemType {
   lastName: string;
   handleAcceptRequest: (senderId: string) => void;
 }
-
