@@ -14,6 +14,7 @@ export const pushNotification = async (req, res) => {
       body: body,
     },
     android: { priority: "high" },
+    
     webpush: {
       headers: { Urgency: "high" },
       notification: {

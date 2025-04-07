@@ -7,10 +7,10 @@ import { AppDispatch, RootState } from "../../store/store";
 import { useEffect} from "react";
 import { setOnlineUsers } from "../../features/AuthSlice";
 import {
-  requestNotificationPermission,
+  // requestNotificationPermission,
   // sendPushNotification,
 } from "../../pushNotification";
-import { getToken } from "../../features/SendNotificationSlice";
+// import { getToken } from "../../features/SendNotificationSlice";
 
 const Home = () => {
   // const [fcmToken, setFcmToken] = useState("");
@@ -30,18 +30,18 @@ const Home = () => {
     }
   }, [dispatch, socket]);
 
-  useEffect(() => {
-    const handleRequestPermission = async () => {
-      const token = await requestNotificationPermission();
-      console.log("token", token);
+  // useEffect(() => {
+  //   const handleRequestPermission = async () => {
+  //     const token = await requestNotificationPermission();
+  //     console.log("token", token);
 
-      if (token) {
-        // setFcmToken(token);
-        dispatch(getToken(token));
-      }
-    };
-    handleRequestPermission();
-  }, [dispatch]);
+  //     if (token) {
+  //       // setFcmToken(token);
+  //       dispatch(getToken(token));
+  //     }
+  //   };
+  //   handleRequestPermission();
+  // }, [dispatch]);
 
   // const handleSendNotification = () => {
   //   if (!fcmToken) {
