@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store/store.tsx";
 import "react-loading-skeleton/dist/skeleton.css";
-import { isIOS } from "./utils/isIos.tsx";
+// import { isIOS } from "./utils/isIos.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -33,15 +33,15 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-if(!isIOS()){
-if ("serviceWorker" in navigator && 'PushManager' in window) {
-  navigator.serviceWorker
-    .register("/firebase-messaging-sw.js") // Must be inside `public` folder
-    .then((registration) => {
-      console.log("✅Push notification Service Worker registered:", registration);
-    })
-    .catch((error) => {
-      console.error("❌Push notification Service Worker registration failed:", error);
-    });
-}
-}
+// if(!isIOS()){
+// if ("serviceWorker" in navigator && 'PushManager' in window) {
+//   navigator.serviceWorker
+//     .register("/firebase-messaging-sw.js") // Must be inside `public` folder
+//     .then((registration) => {
+//       console.log("✅Push notification Service Worker registered:", registration);
+//     })
+//     .catch((error) => {
+//       console.error("❌Push notification Service Worker registration failed:", error);
+//     });
+// }
+// }
