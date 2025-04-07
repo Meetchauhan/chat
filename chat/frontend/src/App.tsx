@@ -15,7 +15,7 @@ import { clearMessages, getMessagesFromDB } from "./db/db";
 import { sendMessage } from "./features/ChatSlice";
 import { SendMessagePayload } from "./types/Types";
 import store from "./store/store";
-// import { setupFirebaseMessaging } from "./firebase";
+import { setupFirebaseMessaging } from "./firebase";
 // import { getMessages, subscribeToMessage, unSubscribeToMessage } from "./features/ChatSlice";
 // import useSelectedUser from "./customHooks/useSelectedUser";
 
@@ -26,9 +26,9 @@ const App: React.FC = () => {
     dispatch(getProfile());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   setupFirebaseMessaging();
-  // }, []);
+  useEffect(() => {
+    setupFirebaseMessaging();
+  }, []);
 
   const syncMessages = useCallback(async () => {
     console.log("🌍 User is online. Syncing messages...");
