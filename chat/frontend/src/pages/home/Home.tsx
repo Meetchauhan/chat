@@ -38,6 +38,8 @@ const Home = () => {
       if (token) {
         // setFcmToken(token);
         dispatch(getToken(token));
+      }else{
+        return 
       }
     };
     handleRequestPermission();
