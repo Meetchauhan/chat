@@ -14,8 +14,11 @@ import useOnlineUser from "../../customHooks/useOnlineUser";
 import SendMessage from "../sendMessage/SendMessage";
 import { ChatType } from "../../types/Types";
 import { formateMessageTime } from "../../utils/Utils";
+import NotificationSound from "../notificationSound/NotificationSound";
 
 const Chat = () => {
+  const [messagesFetched, setMessagesFetched] = useState(false);
+  const [isNotification, setIsNotification] = useState(false);
   const selectedUser = useSelectedUser();
   const getChat = useGetMessages();
   const profile = useProfile();
@@ -29,12 +32,11 @@ const Chat = () => {
   );
 
   // ✅ Track if messages have already been fetched
-  const [messagesFetched, setMessagesFetched] = useState(false);
   const getToken = useSelector(
     (item: RootState) => item?.sendNotification?.token
   );
-  const senderFirstName = profile?.data?.firstName || undefined
-console.log("get token", getToken);
+  const senderFirstName = profile?.data?.firstName || undefined;
+  console.log("get token", getToken);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -57,7 +59,6 @@ console.log("get token", getToken);
         // ✅ 3. If online, sync with the server
         if (navigator.onLine) {
           await dispatch(getMessages(selectedUser._id));
-          
         }
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -89,14 +90,23 @@ console.log("get token", getToken);
         messageLoading,
         senderFirstName
       );
+      setIsNotification(true);
     }
 
     return () => {
       if (socket) {
         unSubscribeToMessage(socket);
+        setIsNotification(false);
       }
     };
-  }, [selectedUser, socket, dispatch, profile?.data?._id, messageLoading, senderFirstName]);
+  }, [
+    selectedUser,
+    socket,
+    dispatch,
+    profile?.data?._id,
+    messageLoading,
+    senderFirstName,
+  ]);
 
   // ✅ Scroll to the latest message
   useEffect(() => {
@@ -208,6 +218,7 @@ console.log("get token", getToken);
         </div>
       </div>
       <SendMessage />
+      {isNotification && <NotificationSound />}
     </div>
   );
 };

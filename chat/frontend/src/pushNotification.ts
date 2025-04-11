@@ -1,6 +1,7 @@
 import { MessagePayload } from "firebase/messaging";
 import { messaging, getToken, onMessage } from "./firebase";
 import axios from "axios";
+import { isIOS } from "./utils/isIos";
 
 const VAPID_KEY = import.meta.env.VITE_VAPID_KEY?.trim();
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -10,6 +11,11 @@ if (!VAPID_KEY) {
 }
 
 export const requestNotificationPermission = async () => {
+  if (isIOS()) {
+    console.warn("❌ Notifications are not supported on iOS browsers.");
+    return;
+  }
+
   const permission = await Notification.requestPermission();
   if (permission !== "granted") {
     console.warn("❌ Notification permission denied.");
@@ -18,7 +24,7 @@ export const requestNotificationPermission = async () => {
 
   try {
     const token = await getToken(messaging, {
-      vapidKey: VAPID_KEY, // Pass the VAPID key
+      vapidKey: VAPID_KEY,
     });
 
     console.log("✅ FCM Token:", token);
@@ -30,6 +36,11 @@ export const requestNotificationPermission = async () => {
 
 // Listen for incoming messages
 onMessage(messaging, (payload: MessagePayload) => {
+  if (isIOS()) {
+    console.warn("❌ Notifications are not supported on iOS browsers.");
+    return;
+  }
+
   console.log("🔥 Foreground message received!", payload);
 
   if (payload.notification) {

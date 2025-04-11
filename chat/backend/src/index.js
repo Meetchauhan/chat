@@ -29,24 +29,11 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// const io = new Server(server, {
-//   cors: {
-//     origin: "http://localhost:5173",
-//     methods: ["GET", "POST"],
-//     allowedHeaders: ["*"],
-//     credentials: true,
-//   },
-//   transports: ["websocket", "polling"],
-// });
-
 app.use("/api/user", registerRoute);
 app.use("/api/message", messageRoute);
 app.use("/api", connecUsersRoute);
 app.use("/api", pushNotificationRouter);
 
-// app.get("/", (req, res) => {
-//   res.send("Server is started");
-// });
 
 app.use(express.static(path.join(__dirname, "../../frontend/dist"))); // Adjust path if needed
 

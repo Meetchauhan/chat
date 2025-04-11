@@ -85,7 +85,7 @@ export const subscribeToMessages = (
 
   socket.on("newMessage", async (newMessage: Message) => {
     console.log("🔵 New message received:", newMessage);
-
+      
     // Ensure the message is meant for the currently selected chat
     console.log("messageLoading", messageLoading);
     const getToken = await requestNotificationPermission();

@@ -16,17 +16,21 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_APP_ID,
   measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 };
-// const VAPID_KEY = import.meta.env.VITE_VAPID_KEY;
-// ✅ Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 
 const messaging = getMessaging(app);
+
 export const setupFirebaseMessaging = async () => {
-  if (!isIOS() && (await isSupported())) {
-    // ✅ Register Service Worker Correctly
+  if (isIOS()) {
+    console.warn("❌ Push notifications are not supported on iOS browsers.");
+    return; // Skip push notification setup for iOS
+  }
+
+  if (await isSupported()) {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
-        .register("/firebase-messaging-sw.js") // Must be inside the `public` folder
+        .register("/firebase-messaging-sw.js")
         .then((registration) => {
           console.log("✅ Service Worker registered:", registration);
         })
@@ -35,7 +39,7 @@ export const setupFirebaseMessaging = async () => {
         });
     }
   } else {
-    console.log("Push notifications skipped on iOS or unsupported browser.");
+    console.warn("❌ Push notifications are not supported on this browser.");
   }
 };
 
