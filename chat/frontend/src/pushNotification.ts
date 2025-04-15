@@ -10,9 +10,14 @@ if (!VAPID_KEY) {
   console.error("❌ VAPID_KEY is missing! Check your .env file.");
 }
 
+const isNotificationSupported = () =>
+  typeof Notification !== "undefined" &&
+  "serviceWorker" in navigator &&
+  "PushManager" in window;
+
 export const requestNotificationPermission = async () => {
-  if (isIOS()) {
-    console.warn("❌ Notifications are not supported on iOS browsers.");
+  if (isIOS() || !isNotificationSupported()) {
+    console.warn("❌ Notifications are not supported in this browser.");
     return;
   }
 
@@ -35,30 +40,33 @@ export const requestNotificationPermission = async () => {
 };
 
 // Listen for incoming messages
-onMessage(messaging, (payload: MessagePayload) => {
-  if (isIOS()) {
-    console.warn("❌ Notifications are not supported on iOS browsers.");
-    return;
-  }
+if (isNotificationSupported()) {
+  onMessage(messaging, (payload: MessagePayload) => {
+    if (isIOS()) {
+      console.warn("❌ Notifications are not supported on iOS browsers.");
+      return;
+    }
 
-  console.log("🔥 Foreground message received!", payload);
+    console.log("🔥 Foreground message received!", payload);
 
-  if (payload.notification) {
-    const title = payload.notification.title ?? "New Notification";
-    const body = payload.notification.body ?? "You have a new message!";
-    const icon = payload.notification.icon ?? "/fav.svg";
+    if (payload.notification) {
+      const title = payload.notification.title ?? "New Notification";
+      const body = payload.notification.body ?? "You have a new message!";
+      const icon = payload.notification.icon ?? "/fav.svg";
 
-    console.log("🔔 Showing notification:", { title, body, icon });
+      console.log("🔔 Showing notification:", { title, body, icon });
 
-    new Notification(title, { body, icon });
-  } else {
-    console.warn("⚠️ No notification payload found in message.");
-  }
-});
+      new Notification(title, { body, icon });
+    } else {
+      console.warn("⚠️ No notification payload found in message.");
+    }
+  });
 
-console.log("Notification permission", Notification.permission);
+  console.log("Notification permission", Notification.permission);
+} else {
+  console.warn("❌ Notifications are not supported in this environment.");
+}
 
-// Send push notification from frontend
 export const sendPushNotification = async (
   token: string,
   title: string | undefined,
