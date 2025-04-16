@@ -4,7 +4,7 @@ import NoChatSelected from "../../components/chat/NoChatSelected";
 import useSelectedUser from "../../customHooks/useSelectedUser";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
-import { useEffect} from "react";
+import { useEffect } from "react";
 import { setOnlineUsers } from "../../features/AuthSlice";
 import {
   requestNotificationPermission,
@@ -17,6 +17,8 @@ const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
   const selectedUser = useSelectedUser();
   const socket = useSelector((item: RootState) => item?.auth?.socket);
+  console.log("selected user", selectedUser);
+  
 
   useEffect(() => {
     if (socket) {
@@ -38,8 +40,8 @@ const Home = () => {
       if (token) {
         // setFcmToken(token);
         dispatch(getToken(token));
-      }else{
-        return 
+      } else {
+        return;
       }
     };
     handleRequestPermission();
@@ -62,12 +64,12 @@ const Home = () => {
       <div className="hidden md:flex h-[calc(100dvh-73px)]">
         <Sidebar />
         <div className="w-[75%] bg-gray-800 relative min-h-full h-[calc(100dvh-73px)] overflow-x-auto">
-          {selectedUser ? <Chat /> : <NoChatSelected />}
+          {selectedUser !== null ? <Chat /> : <NoChatSelected />}
         </div>
       </div>
       <div className="flex md:hidden h-[calc(100dvh-53px)]">
         <div className="w-full bg-gray-800 relative min-h-full h-[calc(100dvh-53px)] overflow-x-auto">
-          {selectedUser ? <Chat /> : <Sidebar />}
+          {selectedUser !== null ? <Chat /> : <Sidebar />}
         </div>
       </div>
       {/* <div style={{ padding: "20px", textAlign: "center" }}>
