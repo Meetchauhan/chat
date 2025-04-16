@@ -196,7 +196,7 @@ const Chat = () => {
                   >
                     {item?.text && (
                       <div className="my-3 flex flex-row gap-3 items-center w-full">
-                        <div className="text-[18px] lg:text-[20px] text-white bg-gray-600 rounded-full py-2 px-2.5 uppercase w-[45px] lg:w-[50px] flex items-center justify-center">
+                        <div className="text-[18px] lg:text-[20px] text-white bg-gradient-to-r from-gray-700 to-gray-900 rounded-full w-14 h-14 uppercase font-bold flex items-center justify-center">
                           {selectedUser?.firstName?.slice(0, 1)}
                           {selectedUser?.lastName?.slice(0, 1)}
                         </div>
