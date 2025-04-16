@@ -24,13 +24,13 @@ const UsersItem = ({ firstName, lastName, _id }: UsersItemType) => {
   return (
     <div className="px-3" onClick={() => handleSelectUser()}>
       <button className="py-2 px-2 lg:px-5 my-1 flex items-center gap-5 w-full cursor-pointer hover:bg-gray-800 rounded-md border-b-[1px] border-orange-600">
-        <div className="relative text-[16px]text-[16px] text-white bg-gray-600 rounded-full py-2.5 px-3 uppercase w-[45px]">
+        <div className="relative text-[16px]text-[16px] text-white bg-gradient-to-r from-gray-700 to-gray-900 rounded-full w-14 h-14 uppercase font-bold flex items-center justify-center ">
           {firstNameInitial}
           {lastNameInitial}
           {onlineUser?.includes(_id) ? (
             <span className="absolute bottom-1 right-[-5px] bg-green-500 rounded-2xl border-2 border-black">
               <svg
-                width="10"
+                width="10"  
                 height="10"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
