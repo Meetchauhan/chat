@@ -76,7 +76,7 @@ export const subscribeToMessages = (
   selectedUserId: string,
   currentUserId: string | undefined,
   messageLoading: boolean,
-  senderFirstName: string | undefined
+  recieverFirstName: string | undefined
 ) => {
   if (!socket) return;
 
@@ -106,7 +106,7 @@ export const subscribeToMessages = (
             return;
           }
           console.log("new message", newMessage?.text);
-          sendPushNotification(getToken, senderFirstName, newMessage?.text);
+          sendPushNotification(getToken, recieverFirstName, newMessage?.text);
         };
         await handleSendNotification();
       }

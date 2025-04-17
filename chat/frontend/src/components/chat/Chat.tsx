@@ -15,28 +15,44 @@ import SendMessage from "../sendMessage/SendMessage";
 import { ChatType } from "../../types/Types";
 import { formateMessageTime } from "../../utils/Utils";
 import NotificationSound from "../notificationSound/NotificationSound";
+import { useGetChatUsers } from "../../customHooks/useGetChatUsers";
+
+interface senderNameType {
+  _id: string;
+  firstName: string;
+  lastName: string;
+}
 
 const Chat = () => {
   const [messagesFetched, setMessagesFetched] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
   const selectedUser = useSelectedUser();
-  const getChat = useGetMessages();
+  const getChat = useGetMessages() as unknown as ChatType[];
   const profile = useProfile();
   const dispatch = useDispatch<AppDispatch>();
   const isUserOnline = useOnlineUser();
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const socket = useSelector((state: RootState) => state.auth.socket);
   // const state = useSelector((state: RootState) => state?.chat?.messages);
+  const chatUsers = useGetChatUsers();
   const messageLoading = useSelector(
     (state: RootState) => state?.chat?.messageLoading
   );
 
   // ✅ Track if messages have already been fetched
-  const getToken = useSelector(
-    (item: RootState) => item?.sendNotification?.token
-  );
-  const senderFirstName = profile?.data?.firstName || undefined;
-  console.log("get token", getToken);
+  // const getToken = useSelector(
+  //   (item: RootState) => item?.sendNotification?.token
+  // );
+
+  const recieverId = getChat?.[getChat.length - 1]?.senderId;
+  console.log("chat user", recieverId);
+
+  const recieverName = chatUsers?.find((item: senderNameType) =>
+    recieverId === item?._id ? item : null
+  ) as senderNameType | undefined;
+  console.log("reciever name", recieverName);
+  const senderFirstName = `${recieverName?.firstName} ${recieverName?.lastName}`;
+  console.log("sender name", senderFirstName);
 
   useEffect(() => {
     const fetchMessages = async () => {

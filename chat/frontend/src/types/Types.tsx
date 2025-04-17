@@ -90,7 +90,9 @@ export interface ToastErrorArg {
 
 export interface GetMessageType {
   chat: {
+    length: number;
     messages: {
+      length: number;
       map(
         arg0: (item: ChatType) => import("react/jsx-runtime").JSX.Element
       ): ReactNode;
