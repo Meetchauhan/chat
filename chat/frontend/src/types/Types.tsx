@@ -124,6 +124,7 @@ export interface UsersInitialState {
     lastName: string;
   } | null;
   error: string | null;
+  
 }
 
 export interface ProfileInitialState {

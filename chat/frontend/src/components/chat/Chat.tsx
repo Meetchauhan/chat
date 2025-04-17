@@ -33,7 +33,6 @@ const Chat = () => {
   const isUserOnline = useOnlineUser();
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const socket = useSelector((state: RootState) => state.auth.socket);
-  // const state = useSelector((state: RootState) => state?.chat?.messages);
   const chatUsers = useGetChatUsers();
   const messageLoading = useSelector(
     (state: RootState) => state?.chat?.messageLoading
@@ -44,7 +43,6 @@ const Chat = () => {
     (item: RootState) => item?.sendNotification?.token
   );
   console.log("token", getToken);
-  
 
   const recieverId = getChat?.[getChat.length - 1]?.senderId;
   console.log("chat user", recieverId);
@@ -61,10 +59,8 @@ const Chat = () => {
       if (!selectedUser || messagesFetched) return; // Prevent duplicate calls
 
       try {
-        // ✅ 1. Fetch messages from IndexedDB first (for offline support)
         const offlineMessages = await getMessagesFromDB();
 
-        // ✅ 2. Ensure unique messages before setting state
         const uniqueMessages = offlineMessages.filter(
           (msg, index, self) =>
             index === self.findIndex((m) => m._id === msg._id)
@@ -74,7 +70,6 @@ const Chat = () => {
 
         console.log("Offline messages loaded:", uniqueMessages);
 
-        // ✅ 3. If online, sync with the server
         if (navigator.onLine) {
           await dispatch(getMessages(selectedUser._id));
         }
@@ -82,13 +77,11 @@ const Chat = () => {
         console.error("Error fetching messages:", error);
       }
 
-      // ✅ Ensure `getMessages` doesn't run again unnecessarily
       setMessagesFetched(true);
     };
 
     fetchMessages();
 
-    // ✅ Listen for online status change
     const handleOnline = () => {
       setMessagesFetched(false); // Reset flag when coming back online
     };
@@ -97,7 +90,6 @@ const Chat = () => {
     return () => window.removeEventListener("online", handleOnline);
   }, [dispatch, selectedUser, messagesFetched]);
 
-  // ✅ Subscribe to socket messages
   useEffect(() => {
     if (selectedUser && socket) {
       subscribeToMessages(
@@ -126,47 +118,13 @@ const Chat = () => {
     senderFirstName,
   ]);
 
-  // ✅ Scroll to the latest message
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
         chatContainerRef.current.scrollHeight;
     }
   }, [getChat]);
-
-  // const syncMessages = useCallback(async () => {
-  //   setSyncing(true); // ✅ Show loader before syncing
-  //   console.log("🌍 Syncing messages...");
-
-  //   try {
-  //     const unsentMessages = await getMessagesFromDB();
-  //     const messagesToSync = unsentMessages.filter(msg => !msg.success);
-
-  //     if (messagesToSync.length === 0) {
-  //       setSyncing(false);
-  //       return;
-  //     }
-
-  //     for (const msg of messagesToSync) {
-  //       const payload: SendMessagePayload = {
-  //         selectedUserId: msg.recieverId,
-  //         loggedinUserId: msg.senderId!,
-  //         text: msg.text,
-  //       };
-  //       const response = await store.dispatch(sendMessage(payload)).unwrap();
-
-  //       if (response.success) {
-  //         msg.success = true;
-  //         await saveMessage(msg);
-  //       }
-  //     }
-  //     console.log("✅ Messages synced.");
-  //   } catch (error) {
-  //     console.error("❌ Syncing failed:", error);
-  //   } finally {
-  //     setSyncing(false); // ✅ Hide loader after sync
-  //   }
-  // }, []);
+  
 
   return (
     <div className="flex flex-col justify-between h-full">
