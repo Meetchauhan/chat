@@ -20,6 +20,7 @@ export const requestNotificationPermission = async () => {
     console.warn("❌ Notifications are not supported in this browser.");
     return;
   }
+  
 
   const permission = await Notification.requestPermission();
   if (permission !== "granted") {
