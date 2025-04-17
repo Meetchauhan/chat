@@ -40,9 +40,11 @@ const Chat = () => {
   );
 
   // ✅ Track if messages have already been fetched
-  // const getToken = useSelector(
-  //   (item: RootState) => item?.sendNotification?.token
-  // );
+  const getToken = useSelector(
+    (item: RootState) => item?.sendNotification?.token
+  );
+  console.log("token", getToken);
+  
 
   const recieverId = getChat?.[getChat.length - 1]?.senderId;
   console.log("chat user", recieverId);
