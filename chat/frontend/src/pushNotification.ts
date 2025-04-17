@@ -18,7 +18,7 @@ const isNotificationSupported = () =>
 export const requestNotificationPermission = async () => {
   if (isIOS() || !isNotificationSupported()) {
     console.warn("❌ Notifications are not supported in this browser.");
-    return;
+    return false;
   }
   
 
@@ -69,7 +69,7 @@ if (isNotificationSupported()) {
 }
 
 export const sendPushNotification = async (
-  token: string,
+  token: string | boolean | undefined,
   title: string | undefined,
   body: string
 ) => {

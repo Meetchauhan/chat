@@ -101,7 +101,7 @@ export const subscribeToMessages = (
         dispatch(addMessage(newMessage)); // Only add messages that match the selected chat
         await saveMessage(newMessage);
         const handleSendNotification = async () => {
-          if (!getToken) {
+          if (getToken === undefined) {
             alert("Get notification permission first!");
             return;
           }
