@@ -51,7 +51,9 @@ const Chat = () => {
     recieverId === item?._id ? item : null
   ) as senderNameType | undefined;
   console.log("reciever name", recieverName);
-  const senderFirstName = `${recieverName?.firstName} ${recieverName?.lastName}`;
+  const senderFirstName = `${
+    recieverName?.firstName ? recieverName?.firstName : "Test"
+  } ${recieverName?.lastName ? recieverName?.lastName : "User"}`;
   console.log("sender name", senderFirstName);
 
   useEffect(() => {
@@ -124,7 +126,6 @@ const Chat = () => {
         chatContainerRef.current.scrollHeight;
     }
   }, [getChat]);
-  
 
   return (
     <div className="flex flex-col justify-between h-full">
