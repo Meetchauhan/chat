@@ -142,7 +142,7 @@ const Chat = () => {
 
       <div className="h-full w-full flex flex-col items-center justify-between pb-10 pt-[77px] absolute">
         <div className="h-full w-full flex items-end pb-10">
-          <div className="w-full h-full overflow-auto px-5">
+          <div className="w-full h-full overflow-auto md:px-5">
             <div
               ref={chatContainerRef}
               className="w-full h-full overflow-auto px-3 lg:px-10"
