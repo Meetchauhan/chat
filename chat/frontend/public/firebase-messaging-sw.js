@@ -27,7 +27,6 @@ if (
 
   // ✅ Handle Background Messages
   messaging.onBackgroundMessage((payload) => {
-    console.log("📩 Background notification received:", payload);
 
     self.registration.showNotification(payload.notification.title, {
       body: payload.notification.body,

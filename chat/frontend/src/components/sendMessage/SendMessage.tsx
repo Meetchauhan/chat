@@ -6,7 +6,7 @@ import { AppDispatch } from "../../store/store";
 import { addMessage, getMessages, sendMessage } from "../../features/ChatSlice";
 import useSelectedUser from "../../customHooks/useSelectedUser";
 import { useProfile } from "../../customHooks/useProfile";
-import { getMessagesFromDB, saveMessage } from "../../db/db";
+import {  saveMessage } from "../../db/db";
 import { v4 as uuidv4 } from "uuid"; // ✅ Ensures unique ID for offline messages
 
 const SendMessage = () => {
@@ -34,7 +34,6 @@ const SendMessage = () => {
       };
 
       if (!navigator.onLine) {
-        console.log("📴 Offline mode: Saving message locally.");
         await saveMessage(messagePayload); // ✅ Save offline
         dispatch(addMessage(messagePayload)); // ✅ Update UI immediately
         resetForm();
@@ -54,8 +53,6 @@ const SendMessage = () => {
       if (send?.payload?.success) {
         dispatch(getMessages(selectedUser?._id)); // ✅ No `await` needed
       }
-      const unsentMessage = getMessagesFromDB();
-      console.log("unsent message", unsentMessage);
 
       resetForm(); // ✅ Reset form to prevent stale message
     },

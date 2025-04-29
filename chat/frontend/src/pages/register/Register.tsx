@@ -33,7 +33,6 @@ const Register = () => {
     initialValues: initialValue,
     validationSchema: RegistrationSchema,
     onSubmit: async (value, action) => {
-      console.log("register value", value);
       const response = await dispatch(userRegistration(value));
 
       if (response?.payload?.success) {

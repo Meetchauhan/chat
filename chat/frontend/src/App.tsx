@@ -16,8 +16,10 @@ import { sendMessage } from "./features/ChatSlice";
 import { SendMessagePayload } from "./types/Types";
 import store from "./store/store";
 import { setupFirebaseMessaging } from "./firebase";
-// import { getMessages, subscribeToMessage, unSubscribeToMessage } from "./features/ChatSlice";
-// import useSelectedUser from "./customHooks/useSelectedUser";
+import Dashboard from "./admin/pages/dashboard/Dahsboard";
+import AllChats from "./admin/pages/allChats/AllChats";
+import Users from "./admin/pages/users/Users";
+import AdminLayout from "./admin/components/adminLayout/AdminLayout";
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,36 +33,28 @@ const App: React.FC = () => {
   }, []);
 
   const syncMessages = useCallback(async () => {
-    console.log("🌍 User is online. Syncing messages...");
-
     try {
       const unsentMessages = await getMessagesFromDB();
 
       if (unsentMessages.length === 0) {
-        console.log("⚠️ No unsent messages to sync.");
         return;
       }
-
-      console.log("📩 Found unsent messages:", unsentMessages);
 
       const sendPromises = unsentMessages.map(async (msg) => {
         const payload: SendMessagePayload = {
           selectedUserId: msg.recieverId,
           loggedinUserId: msg.senderId!,
           text: msg.text,
-          senderFirstName: msg.senderFirstName
+          senderFirstName: msg.senderFirstName,
         };
 
         return store.dispatch(sendMessage(payload)).unwrap();
       });
 
-      await Promise.all(sendPromises); // ✅ Send all messages concurrently
-      console.log("🌍 User is online. Syncing complated...");
-      await clearMessages(); // ✅ Remove synced messages from IndexedDB
-
-      console.log("✅ All offline messages sent and cleared from IndexedDB.");
+      await Promise.all(sendPromises);
+      await clearMessages();
     } catch (error) {
-      console.error("❌ Error syncing messages:", error);
+      console.error("Error syncing messages:", error);
     }
   }, []);
 
@@ -68,27 +62,65 @@ const App: React.FC = () => {
     window.addEventListener("online", syncMessages);
 
     return () => {
-      console.log("🛑 Cleaning up event listener.");
       window.removeEventListener("online", syncMessages);
     };
   }, [syncMessages]);
 
   return (
-    <Layout>
-      <Routes>
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/login"
-          element={!profile?.success ? <Login /> : <Navigate to={"/"} />}
-        />
-        <Route
-          path="/"
-          element={profile?.success ? <Home /> : <Navigate to={"/login"} />}
-        />
-        <Route path="/find-users" element={<FindUsers />} />
-        <Route path="/request" element={<Request />} />
-      </Routes>
-    </Layout>
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/register" element={<Register />} />
+      <Route
+        path="/login"
+        element={!profile?.success ? <Login /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/"
+        element={
+          profile?.success ? (
+            <Layout>
+              <Home />
+            </Layout>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/find-users"
+        element={
+          <Layout>
+            <FindUsers />
+          </Layout>
+        }
+      />
+      <Route
+        path="/request"
+        element={
+          <Layout>
+            <Request />
+          </Layout>
+        }
+      />
+
+      {/* Admin Routes */}
+      <Route
+        path="/admin"
+        element={
+          // profile?.isAdmin ? (
+          <AdminLayout>
+            <Dashboard />
+          </AdminLayout>
+          // ) : (
+          // <Navigate to="/" />
+          // )
+        }
+      >
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="all-chats" element={<AllChats />} />
+        <Route path="users" element={<Users />} />
+      </Route>
+    </Routes>
   );
 };
 

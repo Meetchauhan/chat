@@ -21,7 +21,6 @@ const Header = () => {
   const profile = useProfile();
   const profileLoading = useProfileLoading();
   const requestLoading = useRequestLoading();
-  console.log("request loading", requestLoading);
   
   const userList = () => {
     dispatch(removeSelectUser());

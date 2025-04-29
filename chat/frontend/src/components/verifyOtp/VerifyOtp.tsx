@@ -28,12 +28,10 @@ const VerifyOtp = () => {
   const loginEmail = useSelector(
     (item: RootState) => item?.auth?.loginEmail?.meta?.arg
   );
-  console.log("loginEmail", loginEmail);
 
   const navigate = useNavigate();
 
   const resendMail = localStorage.getItem("loginMain");
-  console.log("resend mail", resendMail);
 
   const initialValue = {
     otp: "",
@@ -42,11 +40,9 @@ const VerifyOtp = () => {
     initialValues: initialValue,
     validationSchema: VerifyOtpSchema,
     onSubmit: async (value, action) => {
-      console.log("verify value", value);
       const response = await dispatch(verifyOtp(value)).then(() =>
         dispatch(getProfile())
       );
-      // console.log("response", response);
 
       action.resetForm();
       if (response?.payload?.success) {
@@ -77,7 +73,6 @@ const VerifyOtp = () => {
       console.warn("No email found to resend OTP.");
     }
   };
-  console.log("otp value", values);
 
   return (
     <div className="bg-gray-900 flex items-center justify-center min-h-[100dvh] sm:h-full p-5 sm:p-10">

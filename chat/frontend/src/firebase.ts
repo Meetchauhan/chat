@@ -23,7 +23,7 @@ const messaging = getMessaging(app);
 
 export const setupFirebaseMessaging = async () => {
   if (isIOS()) {
-    console.warn("❌ Push notifications are not supported on iOS browsers.");
+    console.warn("Push notifications are not supported on iOS browsers.");
     return; // Skip push notification setup for iOS
   }
 
@@ -32,10 +32,10 @@ export const setupFirebaseMessaging = async () => {
       navigator.serviceWorker
         .register("/firebase-messaging-sw.js")
         .then((registration) => {
-          console.log("✅ Service Worker registered:", registration);
+          console.log("Service Worker registered:", registration);
         })
         .catch((error) => {
-          console.error("❌ Service Worker registration failed:", error);
+          console.error("Service Worker registration failed:", error);
         });
     }
   } else {

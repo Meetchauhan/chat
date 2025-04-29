@@ -5,6 +5,7 @@ import {
   closeInstallAppModal,
   openInstallAppModal,
 } from "../../features/InstallAppSlice";
+import closeBtn from "../../images/close.svg";
 
 declare global {
   interface WindowEventMap {
@@ -27,7 +28,6 @@ const InstallAppButton: React.FC = () => {
   );
   useEffect(() => {
     const handleBeforeInstallPrompt = (event: BeforeInstallPromptEvent) => {
-      console.log("✅ `beforeinstallprompt` event fired!");
       event.preventDefault();
       setDeferredPrompt(event);
       setIsInstallable(true);
@@ -60,11 +60,11 @@ const InstallAppButton: React.FC = () => {
   return isInstallable && isInstallAppModalOpen ? (
     <div className="block md:hidden min-h-[100dvh] h-full w-full absolute z-40 bg-[#0000004a]">
       <div className="flex justify-center items-center h-full">
-        <div className="px-10 py-5 bg-white border-orange-600 border-2 text-center">
-          <button className="" onClick={() => dispatch(closeInstallAppModal())}>
-            Close
+        <div className="px-10 py-5 bg-white border-gray-500 border-2 text-center relative">
+          <button className="absolute top-0 right-0" onClick={() => dispatch(closeInstallAppModal())}>
+            <img className="w-[30px]" src={closeBtn} alt="close" />
           </button>
-          <div className="text-black  font-bold text-xl mb-5">
+          <div className="text-black  font-bold text-xl mb-5 mt-5">
             Want to install as App?
           </div>
           <button

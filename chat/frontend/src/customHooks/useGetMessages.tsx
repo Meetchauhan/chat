@@ -6,7 +6,6 @@ const useGetMessages = () => {
     (item: GetMessageType) => item?.chat?.messages
     
   );
-  console.log("getMessagge", getMessages);
   
   
   return getMessages;

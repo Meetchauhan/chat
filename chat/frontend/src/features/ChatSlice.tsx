@@ -21,7 +21,6 @@ export const getMessages = createAsyncThunk(
   "getMessage",
   async (_id: string) => {
     if (!navigator.onLine) {
-      console.log("📴 Offline: Fetching messages from IndexedDB");
       const localMessages = await getMessagesFromDB();
       return { message: localMessages };
     }
@@ -55,7 +54,6 @@ export const sendMessage = createAsyncThunk(
       senderFirstName: senderFirstName,
     };
     if (!navigator.onLine) {
-      console.log("📴 User is offline. Saving message locally.");
       await saveMessage(message);
       return message;
     }
@@ -84,12 +82,9 @@ export const subscribeToMessages = (
   socket.off("newMessage"); // Remove any existing listener before adding a new one
 
   socket.on("newMessage", async (newMessage: Message) => {
-    console.log("🔵 New message received:", newMessage);
       
     // Ensure the message is meant for the currently selected chat
-    console.log("messageLoading", messageLoading);
     const getToken = await requestNotificationPermission();
-    console.log("get token slice", getToken);
 
     if (!messageLoading) {
       if (
@@ -105,7 +100,6 @@ export const subscribeToMessages = (
             alert("Get notification permission first!");
             return;
           }
-          console.log("new message", newMessage?.text);
           sendPushNotification(getToken, recieverFirstName, newMessage?.text);
         };
         await handleSendNotification();
@@ -117,7 +111,6 @@ export const subscribeToMessages = (
 // ✅ Updated: Use socket from authSlice for unsubscription
 export const unSubscribeToMessage = (socket: typeof Socket | null) => {
   if (!socket) return;
-  console.log("🛑 Unsubscribing from messages.");
   socket.off("newMessage");
 };
 const initialState: UsersInitialState = {

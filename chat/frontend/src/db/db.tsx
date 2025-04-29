@@ -24,7 +24,6 @@ export const getMessagesFromDB = async (): Promise<Message[]> => {
 };
 
 export const clearMessages = async () => {
-  console.log("🗑 Clearing IndexedDB messages...");
   const db = await dbPromise; // Ensure this function is correctly opening IndexedDB
   const tx = db.transaction("messages", "readwrite");
   const store = tx.objectStore("messages");
@@ -32,5 +31,4 @@ export const clearMessages = async () => {
   await store.clear(); // Ensure this properly clears the store
   await tx.done;
 
-  console.log("✅ IndexedDB messages cleared.");
 };

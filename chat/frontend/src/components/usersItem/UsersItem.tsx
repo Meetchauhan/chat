@@ -20,6 +20,7 @@ const UsersItem = ({ firstName, lastName, _id }: UsersItemType) => {
     );
     dispatch(getMessages(_id)); 
   };
+  
 
   return (
     <div className="px-3" onClick={() => handleSelectUser()}>

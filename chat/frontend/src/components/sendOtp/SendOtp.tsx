@@ -29,9 +29,7 @@ const SendOtp = () => {
     initialValues: initialValue,
     validationSchema: SendOtpSchema,
     onSubmit: async (value, action) => {
-      console.log("login value", value);
       const response = await dispatch(sendOtp(value));
-      console.log("response", response);
       dispatch(getLoginEmail(response));
 
       localStorage.setItem("loginMain", JSON.stringify(value));

@@ -11,7 +11,6 @@ const useOnlineUser = () => {
   useEffect(() => {
     if (socket && socket.connected) {
       socket.on("getOnlineUsers", (users: string[]) => {
-        console.log("🔵 Online Users Received:", users);
         dispatch(setOnlineUsers(users));
       });
 

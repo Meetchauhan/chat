@@ -124,7 +124,6 @@ export interface UsersInitialState {
     lastName: string;
   } | null;
   error: string | null;
-  
 }
 
 export interface ProfileInitialState {
@@ -271,4 +270,25 @@ export interface RequestItemType {
   firstName: string;
   lastName: string;
   handleAcceptRequest: (senderId: string) => void;
+}
+
+export interface adminUsersStateType {
+  users: {
+    data: [];
+    success: boolean;
+  } | null;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface UserType {
+  _id: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface AdminUsersItemPropsType {
+  _id: string;
+  firstName: string;
+  lastName: string;
 }

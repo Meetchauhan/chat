@@ -18,7 +18,6 @@ createRoot(document.getElementById("root")!).render(
   </StrictMode>
 );
 
-// ✅ Register Service Worker
 // In your main entry file (e.g., index.tsx)
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -38,10 +37,10 @@ if ("serviceWorker" in navigator && 'PushManager' in window) {
   navigator.serviceWorker
     .register("/firebase-messaging-sw.js") // Must be inside `public` folder
     .then((registration) => {
-      console.log("✅Push notification Service Worker registered:", registration);
+      console.log("Push notification Service Worker registered:", registration);
     })
     .catch((error) => {
-      console.error("❌Push notification Service Worker registration failed:", error);
+      console.error("Push notification Service Worker registration failed:", error);
     });
 }
 }

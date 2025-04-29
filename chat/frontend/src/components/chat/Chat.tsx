@@ -38,23 +38,19 @@ const Chat = () => {
     (state: RootState) => state?.chat?.messageLoading
   );
 
-  // ✅ Track if messages have already been fetched
-  const getToken = useSelector(
-    (item: RootState) => item?.sendNotification?.token
-  );
-  console.log("token", getToken);
+  // Track if messages have already been fetched
+  // const getToken = useSelector(
+  //   (item: RootState) => item?.sendNotification?.token
+  // );
 
   const recieverId = getChat?.[getChat.length - 1]?.senderId;
-  console.log("chat user", recieverId);
 
   const recieverName = chatUsers?.find((item: senderNameType) =>
     recieverId === item?._id ? item : null
   ) as senderNameType | undefined;
-  console.log("reciever name", recieverName);
   const senderFirstName = `${
     recieverName?.firstName ? recieverName?.firstName : "Test"
   } ${recieverName?.lastName ? recieverName?.lastName : "User"}`;
-  console.log("sender name", senderFirstName);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -69,8 +65,6 @@ const Chat = () => {
         );
 
         dispatch({ type: "chat/setMessages", payload: uniqueMessages });
-
-        console.log("Offline messages loaded:", uniqueMessages);
 
         if (navigator.onLine) {
           await dispatch(getMessages(selectedUser._id));

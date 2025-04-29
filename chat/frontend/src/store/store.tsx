@@ -10,6 +10,7 @@ import AcceptRequestSlice from "../features/AcceptRequestSlice";
 import mobileMenuSlice from "../features/mobileMenuSlice";
 import InstallAppSlice from "../features/InstallAppSlice";
 import SendNotificationSlice from "../features/SendNotificationSlice";
+import AdminUserSlice from "../features/AdminUsersSlice";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     menu: mobileMenuSlice,
     installAppModal: InstallAppSlice,
     sendNotification: SendNotificationSlice,
+    adminUsers: AdminUserSlice,
   },
 });
 

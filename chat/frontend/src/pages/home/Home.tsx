@@ -17,7 +17,6 @@ const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
   const selectedUser = useSelectedUser();
   const socket = useSelector((item: RootState) => item?.auth?.socket);
-  console.log("selected user", selectedUser);
   
 
   useEffect(() => {
@@ -35,7 +34,6 @@ const Home = () => {
   useEffect(() => {
     const handleRequestPermission = async () => {
       const token = await requestNotificationPermission();
-      console.log("token", token);
 
       if (token) {
         // setFcmToken(token);
