@@ -46,7 +46,7 @@ export const login = async (req, res) => {
       user.otp = otp;
       await otpMail(res, otp, email);
       await user.save();
-      generateToken(res, user._id);
+      // generateToken(res, user._id);
       res.status(200).json({
         success: true,
         message: "OTP sent successfully...!",
