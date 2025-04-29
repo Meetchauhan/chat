@@ -90,6 +90,7 @@ const VerifyOtp = () => {
               value={values?.otp}
               onChange={handleChange}
               error={touched?.otp && errors?.otp}
+              
             />
           </div>
           <Button

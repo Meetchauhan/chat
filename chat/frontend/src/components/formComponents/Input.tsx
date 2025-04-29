@@ -25,6 +25,7 @@ const Input = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        autoFocus
         className="text-zinc-200 border-2 border-white rounded-sm text-md p-2 w-full focus:outline-0"
       />
       <p className="text-red-700">{error}</p>
