@@ -50,7 +50,7 @@ export const login = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "OTP sent successfully...!",
-        otp: otp,
+        // otp: otp,
       });
       setTimeout(() => {
         user.otp = null;
